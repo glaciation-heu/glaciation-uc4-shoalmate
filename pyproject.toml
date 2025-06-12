@@ -5,3 +5,10 @@ description = "Multi-cluster data orchestrator for GLACIATION use case 4"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = []
+
+[project.optional-dependencies]
+dev = ["mypy>=1.8.0"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true

@@ -8,7 +8,7 @@ logging.basicConfig(
 )
 
 
-def main():
+def main() -> None:
     logging.info("Shoalmate started!")
     while True:
         sleep(10)
