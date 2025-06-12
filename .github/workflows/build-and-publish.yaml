@@ -54,12 +54,9 @@ jobs:
           yq -i ".version = \"${{ env.VERSION }}\"" ./charts/shoalmate/Chart.yaml
           yq -i ".appVersion = \"${{ env.VERSION }}\"" ./charts/shoalmate/Chart.yaml
 
-      - name: Package Helm charts
-        run: helm package ./charts/* -d .cr-release-packages
-
-      - name: Upload Helm charts
-        uses: docker/build-push-action@v6
+      - name: Publish Helm charts
+        uses: stefanprodan/helm-gh-pages@master
         with:
-          context: .cr-release-packages
-          push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}-helm:${{ env.VERSION }}
+          token: ${{ github.token }}
+          charts_dir: "./charts/"
+          target_dir: "./helm-charts/"
