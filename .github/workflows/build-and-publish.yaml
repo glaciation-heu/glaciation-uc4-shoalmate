@@ -6,7 +6,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: glaciationipto/uc4-workload
+  IMAGE_NAME: glaciation-heu/shoalmate
 
 jobs:
   build:
@@ -51,8 +51,8 @@ jobs:
 
       - name: Update Helm Chart version
         run: |
-          yq -i ".version = \"${{ env.VERSION }}\"" ./charts/uc4-shoalmate/Chart.yaml
-          yq -i ".appVersion = \"${{ env.VERSION }}\"" ./charts/uc4-shoalmate/Chart.yaml
+          yq -i ".version = \"${{ env.VERSION }}\"" ./charts/shoalmate/Chart.yaml
+          yq -i ".appVersion = \"${{ env.VERSION }}\"" ./charts/shoalmate/Chart.yaml
 
       - name: Publish Helm charts
         uses: stefanprodan/helm-gh-pages@master

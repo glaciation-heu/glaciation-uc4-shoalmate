@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: uc4-shoalmate
+  name: shoalmate
 spec:
   replicas: {{ .Values.analyser.replicas }}
   selector:
     matchLabels:
-      app: uc4-shoalmate
+      app: shoalmate
   template:
     metadata:
       labels:
-        app: uc4-shoalmate
+        app: shoalmate
     spec:
       containers:
         - name: analyser
-          image: "ghcr.io/glaciationipto/uc4-workload:{{ .Chart.AppVersion }}"
+          image: "ghcr.io/glaciation-heu/shoalmate:{{ .Chart.AppVersion }}"
           resources:
             requests:
               cpu: {{ .Values.analyser.resources.requests.cpu }}
