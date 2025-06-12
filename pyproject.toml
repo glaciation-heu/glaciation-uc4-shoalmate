@@ -4,7 +4,10 @@ version = "0.1.0"
 description = "Multi-cluster data orchestrator for GLACIATION use case 4"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "boto3>=1.38.35",
+    "minio>=7.2.15",
+]
 
 [project.optional-dependencies]
 dev = ["mypy>=1.8.0", "pytest>=8.0.0"]

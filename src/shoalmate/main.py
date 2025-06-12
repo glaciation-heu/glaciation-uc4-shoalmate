@@ -1,5 +1,6 @@
 from time import sleep
 import logging
+import minio
 
 
 logging.basicConfig(
