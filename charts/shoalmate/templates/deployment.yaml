@@ -3,7 +3,9 @@ kind: Deployment
 metadata:
   name: shoalmate
 spec:
-  replicas: {{ .Values.analyser.replicas }}
+  strategy:
+    type: Recreate
+  replicas: 1
   selector:
     matchLabels:
       app: shoalmate
