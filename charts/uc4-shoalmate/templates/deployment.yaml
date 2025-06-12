@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uc4-shoalmate
+spec:
+  replicas: {{ .Values.analyser.replicas }}
+  selector:
+    matchLabels:
+      app: uc4-shoalmate
+  template:
+    metadata:
+      labels:
+        app: uc4-shoalmate
+    spec:
+      containers:
+        - name: analyser
+          image: "ghcr.io/glaciationipto/uc4-workload:{{ .Chart.AppVersion }}"
+          resources:
+            requests:
+              cpu: {{ .Values.analyser.resources.requests.cpu }}
+              memory: {{ .Values.analyser.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.analyser.resources.limits.cpu }}
+              memory: {{ .Values.analyser.resources.limits.memory }}
