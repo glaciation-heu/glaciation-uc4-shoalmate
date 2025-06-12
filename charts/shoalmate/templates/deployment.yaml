@@ -15,12 +15,12 @@ spec:
         app: shoalmate
     spec:
       containers:
-        - name: analyser
+        - name: shoalmate
           image: "ghcr.io/glaciation-heu/shoalmate:{{ .Chart.AppVersion }}"
           resources:
             requests:
-              cpu: {{ .Values.analyser.resources.requests.cpu }}
-              memory: {{ .Values.analyser.resources.requests.memory }}
+              cpu: {{ .Values.shoalmate.resources.requests.cpu }}
+              memory: {{ .Values.shoalmate.resources.requests.memory }}
             limits:
-              cpu: {{ .Values.analyser.resources.limits.cpu }}
-              memory: {{ .Values.analyser.resources.limits.memory }}
+              cpu: {{ .Values.shoalmate.resources.limits.cpu }}
+              memory: {{ .Values.shoalmate.resources.limits.memory }}
