@@ -28,6 +28,7 @@ jobs:
 
       - name: Run tests
         env:
+          PATH: ${{ github.workspace }}/.env/bin:${{ env.PATH }}
           PYTHONPATH: ${{ github.workspace }}/src
         run: |
           pytest tests/
