@@ -28,10 +28,9 @@ jobs:
 
       - name: Run tests
         env:
-          PATH: ${{ github.workspace }}/.env/bin:${{ env.PATH }}
           PYTHONPATH: ${{ github.workspace }}/src
         run: |
-          pytest tests/
+          uv run pytest tests/
 
   trigger-build:
     needs: test
