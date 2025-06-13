@@ -1,5 +1,9 @@
 name: Build and publish
 
+on:
+  push:
+    tags: [ 'v*.*.*' ]
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: glaciation-heu/shoalmate
