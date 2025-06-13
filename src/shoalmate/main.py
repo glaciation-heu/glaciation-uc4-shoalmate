@@ -1,7 +1,7 @@
 from time import sleep
 import logging
-import minio
 
+from shoalmate.client import read_green_index
 
 logging.basicConfig(
     level=logging.INFO,
@@ -10,7 +10,8 @@ logging.basicConfig(
 
 
 def main() -> None:
-    logging.info("Shoalmate started!")
+    logging.info("Shoalmate started")
+    read_green_index()
     while True:
         sleep(10)
 

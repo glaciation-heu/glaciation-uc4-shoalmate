@@ -1,3 +1,6 @@
+# .env files
+settings.env
+
 # Python
 __pycache__/
 *.py[cod]
