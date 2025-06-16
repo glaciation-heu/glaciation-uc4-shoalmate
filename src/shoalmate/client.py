@@ -6,7 +6,7 @@ from shoalmate.settings import get_settings, MinioSettings
 from shoalmate.model import ClusterEnum
 
 
-def get_cluster_settings(cluster: ClusterEnum) -> MinioSettings:
+def _get_cluster_settings(cluster: ClusterEnum) -> MinioSettings:
     settings = get_settings()
     cluster_to_settings = {
         ClusterEnum.CLUSTER_A: settings.cluster,  # TODO: add more clusters
@@ -15,8 +15,8 @@ def get_cluster_settings(cluster: ClusterEnum) -> MinioSettings:
 
 
 @lru_cache
-def get_client(cluster: ClusterEnum) -> Minio:
-    cluster_settings = get_cluster_settings(cluster)
+def _get_client(cluster: ClusterEnum) -> Minio:
+    cluster_settings = _get_cluster_settings(cluster)
     logging.info("Connect to %s", cluster)
     return Minio(
         f'{cluster_settings.host}:{cluster_settings.port}',
@@ -28,6 +28,6 @@ def get_client(cluster: ClusterEnum) -> Minio:
 
 def read_green_index() -> None:
     settings = get_settings()
-    client = get_client(ClusterEnum.CLUSTER_A)
+    client = _get_client(ClusterEnum.CLUSTER_A)
     objects = client.list_objects(settings.input_bucket_index)
     logging.info("Found %d objects in bucket %s", len(list(objects)), settings.input_bucket_index)
