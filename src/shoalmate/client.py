@@ -2,6 +2,7 @@ import logging
 from functools import lru_cache
 
 from minio import Minio
+
 from shoalmate.settings import get_settings, MinioSettings
 from shoalmate.model import ClusterEnum
 
@@ -15,7 +16,7 @@ def _get_cluster_settings(cluster: ClusterEnum) -> MinioSettings:
 
 
 @lru_cache
-def _get_client(cluster: ClusterEnum) -> Minio:
+def get_client(cluster: ClusterEnum) -> Minio:
     cluster_settings = _get_cluster_settings(cluster)
     logging.info("Connect to %s", cluster)
     return Minio(
@@ -24,10 +25,3 @@ def _get_client(cluster: ClusterEnum) -> Minio:
         secret_key=cluster_settings.secret_key,
         secure=cluster_settings.secure,
     )
-
-
-def read_green_index() -> None:
-    settings = get_settings()
-    client = _get_client(ClusterEnum.CLUSTER_A)
-    objects = client.list_objects(settings.input_bucket_index)
-    logging.info("Found %d objects in bucket %s", len(list(objects)), settings.input_bucket_index)
