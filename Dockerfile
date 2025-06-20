@@ -3,7 +3,6 @@ WORKDIR /app
 RUN --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     apk update &&  \
-    apk add gcc musl-dev && \
     pip install uv && \
     uv sync --locked --no-dev
 COPY src /app/src
