@@ -20,40 +20,47 @@ class IndexStorage:
     _index: IndexTimeline
 
     def __init__(self) -> None:
-        self._index = []
-        objects = self._load_list()
-        for line in self._parse_object(objects):
-            self._index.append(line)
-        logging.info("Index loaded with %d entries", len(self._index))
+        self._settings = get_settings()
+        self._client = get_client(ClusterEnum.CLUSTER_A)  # TODO: support more clusters
+        self._index = self._load()
 
-    @staticmethod
-    def _load_list() -> tuple[Object]:
-        client = get_client(ClusterEnum.CLUSTER_A)  # TODO: support more clusters
-        settings = get_settings()
-        bucket = settings.input_bucket_index
+    def _load(self) -> list[IndexState]:
+        index = []
+        objects = self._load_list()
+        for object_ in objects:
+            data = self._load_data(object_)
+            for line in self._parse_data(data):
+                index.append(line)
+        logging.info("Loaded index with %d entries", len(index))
+        return index
+
+    def _load_list(self) -> tuple[Object]:
+        bucket = self._settings.input_bucket_index
         objects = tuple(
             sorted(
-                client.list_objects(bucket),
+                self._client.list_objects(bucket),
                 key=lambda obj: obj.object_name
             )
         )
         logging.info("Found %d objects in bucket %s", len(objects), bucket)
         return objects
 
+    def _load_data(self, object_: Object) -> str:
+        logging.info("Read /%s/%s", self._settings.input_bucket_index, object_.object_name)
+        response = self._client.get_object(
+            self._settings.input_bucket_index,
+            object_.object_name,
+        )
+        return response.read().decode('utf-8')
+
     @staticmethod
-    def _parse_object(objects: tuple[Object]) -> Iterator[IndexState]:
-        client = get_client(ClusterEnum.CLUSTER_A)
-        settings = get_settings()
-        for object_ in objects:
-            logging.info("Read /%s/%s", settings.input_bucket_index, object_.object_name)
-            response = client.get_object(settings.input_bucket_index, object_.object_name)
-            data = response.read().decode('utf-8')
-            for row in DictReader(StringIO(data)):
-                if int(row['TIMESTAMP']) > 365 * 24 - 1:
-                    break
-                data = {
-                    ClusterEnum.CLUSTER_A: float(row['GI_siteA']),
-                    ClusterEnum.CLUSTER_B: float(row['GI_siteB']),
-                    ClusterEnum.CLUSTER_C: float(row['GI_siteC']),
-                }
-                yield data
+    def _parse_data(data: str) -> Iterator[IndexState]:
+        for row in DictReader(StringIO(data)):
+            if int(row['TIMESTAMP']) > 365 * 24 - 1:
+                break
+            data = {
+                ClusterEnum.CLUSTER_A: float(row['GI_siteA']),
+                ClusterEnum.CLUSTER_B: float(row['GI_siteB']),
+                ClusterEnum.CLUSTER_C: float(row['GI_siteC']),
+            }
+            yield data
