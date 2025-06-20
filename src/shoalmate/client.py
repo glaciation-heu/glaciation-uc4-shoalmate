@@ -4,21 +4,23 @@ from functools import lru_cache
 from minio import Minio
 
 from shoalmate.settings import get_settings, MinioSettings
-from shoalmate.model import ClusterEnum
+from shoalmate.model import ClusterIDEnum
 
 
-def _get_cluster_settings(cluster: ClusterEnum) -> MinioSettings:
+def _get_cluster_settings(cluster: ClusterIDEnum) -> MinioSettings:
     settings = get_settings()
     cluster_to_settings = {
-        ClusterEnum.CLUSTER_A: settings.cluster,  # TODO: add more clusters
+        ClusterIDEnum.CLUSTER_A: settings.cluster_a,
+        ClusterIDEnum.CLUSTER_B: settings.cluster_b,
+        ClusterIDEnum.CLUSTER_C: settings.cluster_c,
     }
     return cluster_to_settings[cluster]
 
 
 @lru_cache
-def get_client(cluster: ClusterEnum) -> Minio:
-    cluster_settings = _get_cluster_settings(cluster)
-    logging.info("Connect to %s", cluster)
+def get_client(cluster_id: ClusterIDEnum) -> Minio:
+    cluster_settings = _get_cluster_settings(cluster_id)
+    logging.info("Connect to %s", cluster_id)
     return Minio(
         f'{cluster_settings.host}:{cluster_settings.port}',
         access_key=cluster_settings.access_key,

@@ -1,17 +1,16 @@
 import logging
 from csv import DictReader
-from datetime import datetime
 from io import StringIO
 from typing import Iterator
 
 from minio.datatypes import Object
 
 from shoalmate.client import get_client
-from shoalmate.model import ClusterEnum
+from shoalmate.model import ClusterIDEnum
 from shoalmate.settings import get_settings
 
 
-IndexState = dict[ClusterEnum, float]
+IndexState = dict[ClusterIDEnum, float]
 IndexTimeline = list[IndexState]
 
 
@@ -21,7 +20,7 @@ class IndexStorage:
 
     def __init__(self) -> None:
         self._settings = get_settings()
-        self._client = get_client(ClusterEnum.CLUSTER_A)  # TODO: support more clusters
+        self._client = get_client(self._settings.cluster_id)
         self._index = self._load()
 
     def _load(self) -> list[IndexState]:
@@ -43,6 +42,7 @@ class IndexStorage:
             )
         )
         logging.info("Found %d objects in bucket %s", len(objects), bucket)
+        # noinspection PyTypeChecker
         return objects
 
     def _load_data(self, object_: Object) -> str:
@@ -59,8 +59,8 @@ class IndexStorage:
             if int(row['TIMESTAMP']) > 365 * 24 - 1:
                 break
             data = {
-                ClusterEnum.CLUSTER_A: float(row['GI_siteA']),
-                ClusterEnum.CLUSTER_B: float(row['GI_siteB']),
-                ClusterEnum.CLUSTER_C: float(row['GI_siteC']),
+                ClusterIDEnum.CLUSTER_A: float(row['GI_siteA']),
+                ClusterIDEnum.CLUSTER_B: float(row['GI_siteB']),
+                ClusterIDEnum.CLUSTER_C: float(row['GI_siteC']),
             }
             yield data

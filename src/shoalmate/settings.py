@@ -3,6 +3,8 @@ from functools import lru_cache
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from shoalmate.model import ClusterIDEnum
+
 
 class MinioSettings(BaseModel):
     access_key: str
@@ -13,7 +15,11 @@ class MinioSettings(BaseModel):
 
 
 class Settings(BaseSettings):
-    cluster: MinioSettings
+    cluster_id: ClusterIDEnum
+    cluster_a: MinioSettings
+    cluster_b: MinioSettings
+    cluster_c: MinioSettings
+
     input_bucket_chunks: str = 'chunks'
     input_bucket_index: str = 'green-index'
     output_bucket: str = 'proc'
