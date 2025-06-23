@@ -3,6 +3,7 @@ import logging
 
 from shoalmate.index import GreenIndexProvider
 
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(levelname)s - %(message)s'
