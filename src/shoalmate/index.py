@@ -15,13 +15,13 @@ State = dict[ClusterIDEnum, float]
 _Timeline = tuple[State, ...]
 
 
-class GreenIndex:
-    """Green Energy Index timeline."""
+class GreenIndexProvider:
+    """Provide Green Energy Index values for all clusters at some moment."""
 
-    def __init__(self, timeline: _Timeline) -> None:
-        self._timeline = timeline
+    def __init__(self) -> None:
+        self._timeline = _Loader().load()
 
-    def get_state(self, time_offset: timedelta) -> State:
+    def get(self, time_offset: timedelta) -> State:
         """Get the Green Energy Index for all clusters at the given time offset."""
         self._validate(time_offset)
         hours = int(time_offset.total_seconds() // 3600)
@@ -34,18 +34,18 @@ class GreenIndex:
             raise ValueError("Time offset exceeds available timeline length")
 
 
-class Loader:
+class _Loader:
     """Loads Green Energy Index timeline from MinIO."""
 
     def __init__(self) -> None:
         self._settings = get_settings()
         self._client = get_client(self._settings.cluster_id)
 
-    def load(self) -> GreenIndex:
+    def load(self) -> _Timeline:
         objects = self._load_list()
         index = tuple(self._load_items(objects))
-        logging.info("Loaded Green Index with %d entries (hourly for %d years)", len(index), len(index) / (24 * 365))
-        return GreenIndex(index)
+        logging.info("Loaded green index with %d entries (hourly for %d years)", len(index), len(index) / (24 * 365))
+        return index
 
     def _load_list(self) -> tuple[Object]:
         bucket = self._settings.input_bucket_index

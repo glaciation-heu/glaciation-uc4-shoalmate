@@ -1,7 +1,7 @@
 from time import sleep
 import logging
 
-from shoalmate.index import Loader
+from shoalmate.index import GreenIndexProvider
 
 logging.basicConfig(
     level=logging.INFO,
@@ -11,7 +11,7 @@ logging.basicConfig(
 
 def main() -> None:
     logging.info("Shoalmate started")
-    Loader().load()
+    index = GreenIndexProvider()
     while True:
         sleep(10)
 
