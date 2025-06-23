@@ -1,7 +1,7 @@
 from time import sleep
 import logging
 
-from shoalmate.index_storage import IndexStorage
+from shoalmate.index import Loader
 
 logging.basicConfig(
     level=logging.INFO,
@@ -11,7 +11,7 @@ logging.basicConfig(
 
 def main() -> None:
     logging.info("Shoalmate started")
-    IndexStorage()
+    Loader().load()
     while True:
         sleep(10)
 

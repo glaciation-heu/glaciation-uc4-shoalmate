@@ -11,25 +11,19 @@ from shoalmate.settings import get_settings
 
 
 IndexState = dict[ClusterIDEnum, float]
-IndexTimeline = list[IndexState]
+IndexTimeline = tuple[IndexState, ...]
 
 
-class IndexStorage:
-
-    _index: IndexTimeline
+class Loader:
+    """Loads Green Energy Index timeline from MinIO."""
 
     def __init__(self) -> None:
         self._settings = get_settings()
         self._client = get_client(self._settings.cluster_id)
-        self._index = self._load()
 
-    def _load(self) -> list[IndexState]:
-        index = []
+    def load(self) -> IndexTimeline:
         objects = self._load_list()
-        for object_ in objects:
-            data = self._load_data(object_)
-            for line in self._parse_data(data):
-                index.append(line)
+        index = tuple(self._load_items(objects))
         logging.info("Loaded index with %d entries", len(index))
         return index
 
@@ -44,6 +38,12 @@ class IndexStorage:
         logging.info("Found %d objects in bucket %s", len(objects), bucket)
         # noinspection PyTypeChecker
         return objects
+
+    def _load_items(self, objects: tuple[Object]) -> Iterator[IndexState]:
+        for object_ in objects:
+            data = self._load_data(object_)
+            for line in self._parse_data(data):
+                yield line
 
     def _load_data(self, object_: Object) -> str:
         logging.info("Read /%s/%s", self._settings.input_bucket_index, object_.object_name)
