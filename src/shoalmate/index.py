@@ -1,5 +1,6 @@
 import logging
 from csv import DictReader
+from datetime import timedelta
 from io import StringIO
 from typing import Iterator
 
@@ -10,8 +11,27 @@ from shoalmate.model import ClusterIDEnum
 from shoalmate.settings import get_settings
 
 
-IndexState = dict[ClusterIDEnum, float]
-IndexTimeline = tuple[IndexState, ...]
+State = dict[ClusterIDEnum, float]
+_Timeline = tuple[State, ...]
+
+
+class GreenIndex:
+    """Green Energy Index timeline."""
+
+    def __init__(self, timeline: _Timeline) -> None:
+        self._timeline = timeline
+
+    def get_state(self, time_offset: timedelta) -> State:
+        """Get the Green Energy Index for all clusters at the given time offset."""
+        self._validate(time_offset)
+        hours = int(time_offset.total_seconds() // 3600)
+        return self._timeline[hours % len(self._timeline)]
+
+    def _validate(self, time_offset: timedelta) -> None:
+        if time_offset.total_seconds() < 0:
+            raise ValueError("Time offset cannot be negative")
+        elif time_offset.total_seconds() // 3600 > len(self._timeline):
+            raise ValueError("Time offset exceeds available timeline length")
 
 
 class Loader:
@@ -21,11 +41,11 @@ class Loader:
         self._settings = get_settings()
         self._client = get_client(self._settings.cluster_id)
 
-    def load(self) -> IndexTimeline:
+    def load(self) -> GreenIndex:
         objects = self._load_list()
         index = tuple(self._load_items(objects))
-        logging.info("Loaded index with %d entries", len(index))
-        return index
+        logging.info("Loaded Green Index with %d entries (hourly for %d years)", len(index), len(index) / (24 * 365))
+        return GreenIndex(index)
 
     def _load_list(self) -> tuple[Object]:
         bucket = self._settings.input_bucket_index
@@ -39,7 +59,7 @@ class Loader:
         # noinspection PyTypeChecker
         return objects
 
-    def _load_items(self, objects: tuple[Object]) -> Iterator[IndexState]:
+    def _load_items(self, objects: tuple[Object]) -> Iterator[State]:
         for object_ in objects:
             data = self._load_data(object_)
             for line in self._parse_data(data):
@@ -54,7 +74,7 @@ class Loader:
         return response.read().decode('utf-8')
 
     @staticmethod
-    def _parse_data(data: str) -> Iterator[IndexState]:
+    def _parse_data(data: str) -> Iterator[State]:
         for row in DictReader(StringIO(data)):
             if int(row['TIMESTAMP']) > 365 * 24 - 1:
                 break
