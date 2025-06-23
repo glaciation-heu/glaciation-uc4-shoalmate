@@ -30,7 +30,7 @@ class GreenIndexProvider:
     def _validate(self, time_offset: timedelta) -> None:
         if time_offset.total_seconds() < 0:
             raise ValueError("Time offset cannot be negative")
-        elif time_offset.total_seconds() // 3600 > len(self._timeline):
+        elif time_offset.total_seconds() // 3600 >= len(self._timeline):
             raise ValueError("Time offset exceeds available timeline length")
 
 
