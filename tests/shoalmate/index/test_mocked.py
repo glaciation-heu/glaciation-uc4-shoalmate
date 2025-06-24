@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 import pytest
 
-from shoalmate.index import Ranker
+from shoalmate.ranker import Ranker
 from shoalmate.settings import ClusterIDEnum
 
 TEST_TIMELINE = (
@@ -27,7 +27,7 @@ TEST_TIMELINE = (
 
 @pytest.fixture(autouse=True)
 def loader_mock():
-    with patch('shoalmate.index._Loader') as mock_loader_class:
+    with patch('shoalmate.ranker._Loader') as mock_loader_class:
         mock_loader_instance = mock_loader_class.return_value
         mock_loader_instance.load.return_value = TEST_TIMELINE
         yield mock_loader_instance

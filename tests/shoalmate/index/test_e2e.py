@@ -2,7 +2,7 @@ from datetime import timedelta
 
 import pytest
 
-from shoalmate.index import Ranker
+from shoalmate.ranker import Ranker
 from shoalmate.settings import ClusterIDEnum
 
 

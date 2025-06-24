@@ -1,7 +1,7 @@
 from time import sleep
 import logging
 
-from shoalmate.index import Ranker
+from shoalmate.ranker import Ranker
 
 
 logging.basicConfig(
