@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 import pytest
 
-from shoalmate.index import GreenIndexProvider
+from shoalmate.index import Ranker
 from shoalmate.settings import ClusterIDEnum
 
 TEST_TIMELINE = (
@@ -35,14 +35,14 @@ def loader_mock():
 
 @pytest.mark.parametrize("hours_offset", [0, 1, 2])
 def test__call_get_with_valid_hour_offset__valid_response(hours_offset):
-    provider = GreenIndexProvider()
-    result = provider.get(timedelta(hours=hours_offset))
+    ranker = Ranker()
+    result = ranker.get(timedelta(hours=hours_offset))
     assert result == TEST_TIMELINE[hours_offset]
 
 
 def test__call_get_with_valid_fractional_offset__valid_response():
-    provider = GreenIndexProvider()
-    result = provider.get(timedelta(seconds=1))
+    ranker = Ranker()
+    result = ranker.get(timedelta(seconds=1))
     assert result == TEST_TIMELINE[0]
 
 
@@ -55,7 +55,7 @@ def test__call_get_with_valid_fractional_offset__valid_response():
     ]
 )
 def test__call_get_with_invalid_offset__raise(hours_offset, error):
-    provider = GreenIndexProvider()
+    ranker = Ranker()
     with pytest.raises(ValueError) as err:
-        provider.get(timedelta(hours=hours_offset))
+        ranker.get(timedelta(hours=hours_offset))
     assert str(err.value) == error

@@ -9,17 +9,18 @@ from minio.datatypes import Object
 from shoalmate.client import get_client
 from shoalmate.settings import get_settings, ClusterIDEnum
 
-State = dict[ClusterIDEnum, float]
-_Timeline = tuple[State, ...]
+
+Ranks = dict[ClusterIDEnum, float]
+_Timeline = tuple[Ranks, ...]
 
 
-class GreenIndexProvider:
+class Ranker:
     """Provide Green Energy Index values for all clusters at some moment."""
 
     def __init__(self) -> None:
         self._timeline = _Loader().load()
 
-    def get(self, time_offset: timedelta) -> State:
+    def get(self, time_offset: timedelta) -> Ranks:
         """Get the Green Energy Index for all clusters at the given time offset."""
         self._validate(time_offset)
         hours = int(time_offset.total_seconds() // 3600)
@@ -57,11 +58,11 @@ class _Loader:
         # noinspection PyTypeChecker
         return objects
 
-    def _load_items(self, objects: tuple[Object]) -> Iterator[State]:
+    def _load_items(self, objects: tuple[Object]) -> Iterator[Ranks]:
         for object_ in objects:
             data = self._load_data(object_)
-            for line in self._parse_data(data):
-                yield line
+            for ranks in self._parse_data(data):
+                yield ranks
 
     def _load_data(self, object_: Object) -> str:
         logging.info("Read /%s/%s", self._settings.input_bucket_index, object_.object_name)
@@ -72,13 +73,13 @@ class _Loader:
         return response.read().decode('utf-8')
 
     @staticmethod
-    def _parse_data(data: str) -> Iterator[State]:
+    def _parse_data(data: str) -> Iterator[Ranks]:
         for row in DictReader(StringIO(data)):
             if int(row['TIMESTAMP']) > 365 * 24 - 1:
                 break
-            data = {
+            result = {
                 ClusterIDEnum.CLUSTER_A: float(row['GI_siteA']),
                 ClusterIDEnum.CLUSTER_B: float(row['GI_siteB']),
                 ClusterIDEnum.CLUSTER_C: float(row['GI_siteC']),
             }
-            yield data
+            yield result
