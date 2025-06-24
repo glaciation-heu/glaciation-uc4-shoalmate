@@ -7,9 +7,7 @@ from typing import Iterator
 from minio.datatypes import Object
 
 from shoalmate.client import get_client
-from shoalmate.model import ClusterIDEnum
-from shoalmate.settings import get_settings
-
+from shoalmate.settings import get_settings, ClusterIDEnum
 
 State = dict[ClusterIDEnum, float]
 _Timeline = tuple[State, ...]

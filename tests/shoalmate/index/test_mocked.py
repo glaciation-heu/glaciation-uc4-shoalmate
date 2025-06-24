@@ -4,8 +4,7 @@ from unittest.mock import patch
 import pytest
 
 from shoalmate.index import GreenIndexProvider
-from shoalmate.model import ClusterIDEnum
-
+from shoalmate.settings import ClusterIDEnum
 
 TEST_TIMELINE = (
     {

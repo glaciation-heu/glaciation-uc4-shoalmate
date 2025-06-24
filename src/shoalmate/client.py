@@ -3,8 +3,7 @@ from functools import lru_cache
 
 from minio import Minio
 
-from shoalmate.settings import get_settings, MinioSettings
-from shoalmate.model import ClusterIDEnum
+from shoalmate.settings import get_settings, MinioSettings, ClusterIDEnum
 
 
 def _get_cluster_settings(cluster: ClusterIDEnum) -> MinioSettings:

@@ -1,9 +1,14 @@
+from enum import StrEnum
 from functools import lru_cache
 
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from shoalmate.model import ClusterIDEnum
+
+class ClusterIDEnum(StrEnum):
+    CLUSTER_A = "Cluster A"
+    CLUSTER_B = "Cluster B"
+    CLUSTER_C = "Cluster C"
 
 
 class MinioSettings(BaseModel):

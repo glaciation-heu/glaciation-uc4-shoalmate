@@ -3,7 +3,7 @@ from datetime import timedelta
 import pytest
 
 from shoalmate.index import GreenIndexProvider
-from shoalmate.model import ClusterIDEnum
+from shoalmate.settings import ClusterIDEnum
 
 
 @pytest.mark.e2e
