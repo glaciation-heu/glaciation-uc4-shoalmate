@@ -5,7 +5,7 @@ RUN --mount=type=bind,source=uv.lock,target=uv.lock \
     apk update &&  \
     pip install uv && \
     uv sync --locked --no-dev
-COPY src /app/src
+COPY src/shoalmate /app/src/shoalmate
 
 FROM python:3.13-alpine
 COPY --from=builder --chown=app:app /app /app

@@ -30,7 +30,7 @@ jobs:
         env:
           PYTHONPATH: ${{ github.workspace }}/src
         run: |
-          uv run pytest tests/
+          uv run pytest src/tests/
 
   trigger-build:
     needs: test
