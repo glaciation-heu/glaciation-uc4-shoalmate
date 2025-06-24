@@ -14,7 +14,7 @@ def test__init_from_env__initialized():
         "SHOALMATE__CLUSTER_C__ACCESS_KEY": "test_access_key_c",
         "SHOALMATE__CLUSTER_C__SECRET_KEY": "test_secret_key_c",
     }
-    with patch.dict(os.environ, env_vars):
+    with patch.dict(os.environ, env_vars, clear=True):
         settings = Settings()
 
         # Verify that settings were read correctly
