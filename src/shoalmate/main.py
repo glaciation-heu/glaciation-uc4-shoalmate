@@ -1,7 +1,6 @@
-from time import sleep
 import logging
 
-from shoalmate.ranker import Ranker
+from shoalmate.orchestrator import Orchestrator
 
 
 logging.basicConfig(
@@ -12,9 +11,7 @@ logging.basicConfig(
 
 def main() -> None:
     logging.info("Shoalmate started")
-    ranker = Ranker()
-    while True:
-        sleep(10)
+    Orchestrator().run()
 
 
 if __name__ == "__main__":
