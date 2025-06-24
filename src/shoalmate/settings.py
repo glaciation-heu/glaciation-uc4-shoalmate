@@ -20,14 +20,22 @@ class MinioSettings(BaseModel):
 
 
 class Settings(BaseSettings):
+
+    # Current cluster
     cluster_id: ClusterIDEnum
+
+    # Known clusters
     cluster_a: MinioSettings
     cluster_b: MinioSettings
     cluster_c: MinioSettings
 
+    # MinIO buckets
     input_bucket_chunks: str = 'chunks'
     input_bucket_index: str = 'green-index'
     output_bucket: str = 'proc'
+
+    # Threshold for considering ranks similar enough to prefer the current cluster
+    rank_similarity_threshold: float = 0.001
 
     model_config = SettingsConfigDict(
         env_prefix='shoalmate__',

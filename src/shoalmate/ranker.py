@@ -41,6 +41,7 @@ class _Loader:
         self._client = get_client(self._settings.cluster_id)
 
     def load(self) -> _Timeline:
+        logging.info("Load green index dataset")
         objects = self._load_list()
         index = tuple(self._load_items(objects))
         logging.info("Loaded green index with %d entries (hourly for %d years)", len(index), len(index) / (24 * 365))

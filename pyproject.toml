@@ -10,7 +10,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["mypy>=1.8.0", "pytest>=8.0.0"]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-mock>=3.14.1",
+]
 
 [tool.mypy]
 python_version = "3.13"
