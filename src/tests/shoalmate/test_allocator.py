@@ -41,13 +41,11 @@ from shoalmate.settings import ClusterIDEnum
         ),
     ]
 )
-def test__call__valid_response(mocker, current_cluster_id, ranks, expected_result):
+def test__call__valid_response(mocker, settings_mock, current_cluster_id, ranks, expected_result):
     # Arrange
     ranker_mock = mocker.patch('shoalmate.allocator.Ranker')
     ranker_mock.return_value.get.return_value = ranks
-    get_settings_mock = mocker.patch('shoalmate.allocator.get_settings')
-    get_settings_mock.return_value.rank_similarity_threshold = 0.1
-    get_settings_mock.return_value.cluster_id = current_cluster_id
+    settings_mock.cluster_id = current_cluster_id
     time_offset = timedelta(hours=1)
 
     # Act
