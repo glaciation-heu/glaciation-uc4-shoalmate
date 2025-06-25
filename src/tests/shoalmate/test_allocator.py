@@ -41,10 +41,16 @@ from shoalmate.settings import ClusterIDEnum
         ),
     ]
 )
-def test__call__valid_response(mocker, settings_mock, current_cluster_id, ranks, expected_result):
+def test__call__valid_response(
+    mocker,
+    settings_mock,
+    ranker_mock,
+    current_cluster_id,
+    ranks,
+    expected_result,
+):
     # Arrange
-    ranker_mock = mocker.patch('shoalmate.allocator.Ranker')
-    ranker_mock.return_value.get.return_value = ranks
+    ranker_mock.get.return_value = ranks
     settings_mock.cluster_id = current_cluster_id
     time_offset = timedelta(hours=1)
 

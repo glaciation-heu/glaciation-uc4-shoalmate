@@ -23,3 +23,9 @@ def settings_mock(mocker) -> Settings:
     mocker.patch('shoalmate.allocator.get_settings', return_value=settings)
 
     return settings
+
+
+@pytest.fixture
+def ranker_mock(mocker):
+    ranker_mock = mocker.patch('shoalmate.allocator.Ranker')
+    return ranker_mock.return_value
