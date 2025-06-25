@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install uv
-          uv sync --all-extras
+          uv sync --dev
 
       - name: Run tests
         env:
