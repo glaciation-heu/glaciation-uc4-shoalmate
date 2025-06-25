@@ -24,3 +24,8 @@ markers = [
     "e2e: marks tests as end-to-end tests that require real connections",
 ]
 addopts = '-m "not e2e"'
+
+[dependency-groups]
+dev = [
+    "pytest-minio-mock>=0.4.18",
+]
