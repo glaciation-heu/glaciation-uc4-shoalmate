@@ -36,7 +36,6 @@ class Orchestrator:
             objects.sort(key=lambda x: x.object_name)
             for obj in objects:
                 yield obj
-            logging.info("Waiting %d seconds until next check for new objects", SLEEP_TIME)
 
     def _move(self, obj: Object) -> None:
         time_offset = self._get_time_offset_from_name(obj.object_name)
