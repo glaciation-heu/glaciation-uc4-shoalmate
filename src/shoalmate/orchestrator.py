@@ -11,7 +11,7 @@ from shoalmate.client import get_client
 from shoalmate.settings import get_settings
 
 
-SLEEP_TIME = 120
+SLEEP_TIME = 10
 
 
 class Orchestrator:
@@ -27,6 +27,7 @@ class Orchestrator:
     def run(self) -> None:
         for obj in self._listen():
             self._move(obj)
+            sleep(SLEEP_TIME)  # TODO: Replace with message listening and back pressure
 
     def _listen(self) -> Iterator[Object]:
         while True:
@@ -36,7 +37,6 @@ class Orchestrator:
             for obj in objects:
                 yield obj
             logging.info("Waiting %d seconds until next check for new objects", SLEEP_TIME)
-            sleep(SLEEP_TIME)  # TODO: Replace with message listening and back pressure
 
     def _move(self, obj: Object) -> None:
         time_offset = self._get_time_offset_from_name(obj.object_name)
