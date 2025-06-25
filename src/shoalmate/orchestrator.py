@@ -11,6 +11,9 @@ from shoalmate.client import get_client
 from shoalmate.settings import get_settings
 
 
+SLEEP_TIME = 120
+
+
 class Orchestrator:
     """Orchestrates the movement of objects between MinIO buckets across clusters."""
 
@@ -32,8 +35,8 @@ class Orchestrator:
             objects.sort(key=lambda x: x.object_name)
             for obj in objects:
                 yield obj
-            logging.info("Waiting 5 seconds until next check for new objects")
-            sleep(5)
+            logging.info("Waiting %d seconds until next check for new objects", SLEEP_TIME)
+            sleep(SLEEP_TIME)  # TODO: Replace with message listening and back pressure
 
     def _move(self, obj: Object) -> None:
         time_offset = self._get_time_offset_from_name(obj.object_name)
