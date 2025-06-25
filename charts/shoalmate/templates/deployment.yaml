@@ -24,3 +24,6 @@ spec:
             limits:
               cpu: {{ .Values.shoalmate.resources.limits.cpu }}
               memory: {{ .Values.shoalmate.resources.limits.memory }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.shoalmate.secretName }}
