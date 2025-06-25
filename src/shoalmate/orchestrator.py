@@ -11,7 +11,7 @@ from shoalmate.client import get_client
 from shoalmate.settings import get_settings
 
 
-SLEEP_TIME = 10
+SLEEP_TIME = 3
 
 
 class Orchestrator:
