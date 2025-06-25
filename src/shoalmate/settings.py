@@ -6,15 +6,15 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class ClusterIDEnum(StrEnum):
-    CLUSTER_A = "Cluster A"
-    CLUSTER_B = "Cluster B"
-    CLUSTER_C = "Cluster C"
+    CLUSTER_A = "A"
+    CLUSTER_B = "B"
+    CLUSTER_C = "C"
 
 
 class MinioSettings(BaseModel):
     access_key: str
     host: str = 'minio.uc4-minio.svc.cluster.local'
-    port: int = 9000
+    port: int = 80
     secret_key: str
     secure: bool = False
 

@@ -19,7 +19,7 @@ def _get_cluster_settings(cluster: ClusterIDEnum) -> MinioSettings:
 @lru_cache
 def get_client(cluster_id: ClusterIDEnum) -> Minio:
     cluster_settings = _get_cluster_settings(cluster_id)
-    logging.info("Connect to %s", cluster_id)
+    logging.info("Connect to cluster %s", cluster_id)
     return Minio(
         f'{cluster_settings.host}:{cluster_settings.port}',
         access_key=cluster_settings.access_key,

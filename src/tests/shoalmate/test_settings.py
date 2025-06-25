@@ -6,7 +6,7 @@ from shoalmate.settings import Settings, ClusterIDEnum
 
 def test__init_from_env__initialized():
     env_vars = {
-        "SHOALMATE__CLUSTER_ID": "Cluster A",
+        "SHOALMATE__CLUSTER_ID": "A",
         "SHOALMATE__CLUSTER_A__ACCESS_KEY": "test_access_key_a",
         "SHOALMATE__CLUSTER_A__SECRET_KEY": "test_secret_key_a",
         "SHOALMATE__CLUSTER_B__ACCESS_KEY": "test_access_key_b",
@@ -27,4 +27,4 @@ def test__init_from_env__initialized():
         assert settings.cluster_c.secret_key == "test_secret_key_c"
 
         # Verify some default value
-        assert settings.cluster_a.port == 9000
+        assert settings.cluster_a.port == 80
