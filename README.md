@@ -1,6 +1,6 @@
 # Shoalmate
 
-Multi-cluster data orchestrator for GLACIATION use case 4
+Multi-cluster data orchestrator for GLACIATION use case 4.
 
 # Todo
 Defined by Alex and Orestis  on 2025-06-25
@@ -26,9 +26,11 @@ By default, running `pytest` will only execute unit tests. To run unit tests, us
 pytest -m e2e
 ```
 
-To run e2e tests that require real connections to external systems:
+To run e2e tests that require real connections to external systems.
 
 ```bash
-source settings.env
+source .env
 pytest -m "e2e"
 ```
+
+You can use `example.env` to create `.env` file with credentials.
