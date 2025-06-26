@@ -17,7 +17,7 @@ Defined by Alex and Orestis  on 2025-06-25
      - Real time and simulated time
 
 2. Use only one year of Green Index data
-3. Backpressure id proc/ is full
+3. Backpressure when `proc/` is full
 
 
 ## Testing
