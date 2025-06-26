@@ -15,7 +15,9 @@ Defined by Alex and Orestis  on 2025-06-25
    - No need to sync cluster times
    - Every time tick should produce a log record
      - Real time and simulated time
+
 2. Use only one year of Green Index data
+3. Backpressure id proc/ is full
 
 
 ## Testing
