@@ -3,7 +3,6 @@ import re
 from datetime import timedelta
 from io import BytesIO
 from time import sleep
-from typing import Iterator
 from minio.datatypes import Object
 
 from shoalmate.allocator import Allocator
@@ -11,13 +10,11 @@ from shoalmate.client import get_client
 from shoalmate.settings import get_settings
 
 
-SLEEP_TIME = 3
-
-
 class Orchestrator:
     """Orchestrates the movement of objects between MinIO buckets across clusters."""
 
     _object_name_regexp = re.compile(r".*_year(\d+)_(\d+)\.parquet")
+    _sleep_time = 3
 
     def __init__(self) -> None:
         self._allocator = Allocator()
@@ -25,17 +22,19 @@ class Orchestrator:
         self._source_client = get_client(self._settings.cluster_id)
 
     def run(self) -> None:
-        for obj in self._listen():
-            self._move(obj)
-            sleep(SLEEP_TIME)  # TODO: Replace with message listening and back pressure
-
-    def _listen(self) -> Iterator[Object]:
         while True:
-            bucket = self._settings.input_bucket_chunks
-            objects = list(self._source_client.list_objects(bucket))
-            objects.sort(key=lambda x: x.object_name)
-            for obj in objects:
-                yield obj
+            self.run_once()
+
+    def run_once(self) -> None:
+        for obj in self._list():
+            self._move(obj)
+            sleep(self._sleep_time)  # TODO: Replace with message listening and back pressure
+
+    def _list(self) -> list[Object]:
+        bucket = self._settings.input_bucket_chunks
+        objects = list(self._source_client.list_objects(bucket))
+        objects.sort(key=lambda x: x.object_name)
+        return objects
 
     def _move(self, obj: Object) -> None:
         time_offset = self._get_time_offset_from_name(obj.object_name)
