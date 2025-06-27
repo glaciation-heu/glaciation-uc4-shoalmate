@@ -6,6 +6,12 @@ from shoalmate.allocator import Allocator
 from shoalmate.settings import ClusterIDEnum
 
 
+@pytest.fixture
+def ranker_mock(mocker):
+    ranker_mock = mocker.patch('shoalmate.allocator.Ranker')
+    return ranker_mock.return_value
+
+
 @pytest.mark.parametrize(
     "current_cluster_id, ranks, expected_result",
     [

@@ -40,7 +40,14 @@ def minio_clusters_mock(minio_mock, settings_mock):
 
 
 @pytest.fixture
-def orchestrator_mock(minio_clusters_mock , ranker_mock):
+def allocator_mock(mocker):
+    allocator_mock = mocker.patch('shoalmate.orchestrator.Allocator')
+    allocator_mock.return_value.get_target_cluster.return_value = ClusterIDEnum.CLUSTER_A
+    return allocator_mock.return_value
+
+
+@pytest.fixture
+def orchestrator_mock(minio_clusters_mock, allocator_mock):
     orchestrator = Orchestrator()
     orchestrator._sleep_time = 0
     return orchestrator
