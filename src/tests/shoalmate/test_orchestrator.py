@@ -61,3 +61,22 @@ def test__run_when_no_objects__no_action(orchestrator_mock):
         ObjectsCount(0, 0),
     )
     assert get_bucket_counts() == expected
+    
+    
+def test__run_when_objects_in_the_same_cluster__moved_to_proc_a(orchestrator_mock):
+    client = get_client(ClusterIDEnum.CLUSTER_A)
+    client.put_object(
+        bucket_name=get_settings().input_bucket_chunks,
+        object_name="SCADA_siteA_year1_1.parquet",
+        data=bytes(),
+        length=0,
+    )
+
+    orchestrator_mock.run_once()
+
+    expected = ClusterCounts(
+        ObjectsCount(0, 1),
+        ObjectsCount(0, 0),
+        ObjectsCount(0, 0),
+    )
+    assert get_bucket_counts() == expected
