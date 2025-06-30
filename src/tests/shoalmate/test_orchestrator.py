@@ -62,8 +62,10 @@ def test__run_when_no_objects__no_action(orchestrator_mock):
     )
     assert get_bucket_counts() == expected
     
-    
-def test__run_when_objects_in_the_same_cluster__moved_to_proc_a(orchestrator_mock):
+
+@pytest.mark.parametrize("allocated_cluster", ClusterIDEnum)
+def test__run_with_one_object__moved_to_the_right_cluster(orchestrator_mock, allocator_mock, allocated_cluster):
+    # Arrange
     client = get_client(ClusterIDEnum.CLUSTER_A)
     client.put_object(
         bucket_name=get_settings().input_bucket_chunks,
@@ -71,12 +73,38 @@ def test__run_when_objects_in_the_same_cluster__moved_to_proc_a(orchestrator_moc
         data=bytes(),
         length=0,
     )
+    allocator_mock.get_target_cluster.return_value = allocated_cluster
 
+    # Act
     orchestrator_mock.run_once()
 
+    # Assert
     expected = ClusterCounts(
-        ObjectsCount(0, 1),
+        *(
+            ObjectsCount(0, 1) if cluster == allocated_cluster else ObjectsCount(0, 0)
+            for cluster in ClusterIDEnum
+        )
+    )
+    assert get_bucket_counts() == expected
+
+
+def test__run_with_no_objects__nothing_moved(orchestrator_mock):
+    # Arrange
+    client = get_client(ClusterIDEnum.CLUSTER_B)
+    client.put_object(
+        bucket_name=get_settings().input_bucket_chunks,
+        object_name="SCADA_siteA_year1_1.parquet",
+        data=bytes(),
+        length=0,
+    )
+
+    # Act
+    orchestrator_mock.run_once()
+
+    # Assert
+    expected = ClusterCounts(
         ObjectsCount(0, 0),
+        ObjectsCount(1, 0),
         ObjectsCount(0, 0),
     )
     assert get_bucket_counts() == expected
