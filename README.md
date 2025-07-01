@@ -16,8 +16,8 @@ Defined by Alex and Orestis  on 2025-06-25
    - Every time tick should produce a log record
      - Real time and simulated time
 
-2. Use only one year of Green Index data
-3. Backpressure when `proc/` is full
+2. Use only one year of Green Index data (done)
+3. Backpressure when `proc/` is full (done)
 
 
 ## Development
