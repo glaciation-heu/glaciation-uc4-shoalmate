@@ -3,7 +3,7 @@
 Multi-cluster data orchestrator for GLACIATION use case 4.
 
 # Todo
-Defined by Alex and Orestis  on 2025-06-25
+Defined by Alex and Orestis on 2025-06-25
 1. Add a control for the time ticking in Shoalmate
    - Control plane
      - Simulated time
