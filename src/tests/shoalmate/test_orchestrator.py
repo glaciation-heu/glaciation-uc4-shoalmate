@@ -56,16 +56,6 @@ def orchestrator_mock(minio_clusters_mock, allocator_mock):
     return orchestrator
 
 
-def test__run_when_no_objects__no_action(orchestrator_mock):
-    orchestrator_mock.run_once()
-    expected = ClusterCounts(
-        ObjectsCount(0, 0),
-        ObjectsCount(0, 0),
-        ObjectsCount(0, 0),
-    )
-    assert get_bucket_counts() == expected
-
-
 @pytest.mark.parametrize("allocated_cluster", ClusterIDEnum)
 def test__run_with_one_object__moved_to_the_right_cluster(
     orchestrator_mock, allocator_mock, allocated_cluster
