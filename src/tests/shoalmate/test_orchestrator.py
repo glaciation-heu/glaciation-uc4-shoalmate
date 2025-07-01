@@ -33,6 +33,7 @@ def get_bucket_counts() -> ClusterCounts:
 
 @pytest.fixture
 def minio_clusters_mock(minio_mock, settings_mock):
+    get_client.cache_clear()
     for cluster_id in ClusterIDEnum:
         client = get_client(cluster_id)
         client.make_bucket(settings_mock.input_bucket_chunks)

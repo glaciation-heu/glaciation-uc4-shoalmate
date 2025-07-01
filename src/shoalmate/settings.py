@@ -37,6 +37,10 @@ class Settings(BaseSettings):
     # Threshold for considering ranks similar enough to prefer the current cluster
     rank_similarity_threshold: float = 0.001
 
+    # Green Energy Index dataset name prefix.
+    # Use a full object name to limit loading to a single file.
+    green_index_object_name_prefix: str = 'GI_year0.csv'
+
     model_config = SettingsConfigDict(
         env_prefix='shoalmate__',
         env_nested_delimiter='__',

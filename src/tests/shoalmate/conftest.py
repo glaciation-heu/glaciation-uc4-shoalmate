@@ -19,10 +19,6 @@ def settings_mock(mocker) -> Settings:
         "SHOALMATE__CLUSTER_C__ACCESS_KEY": "test_access_key_c",
         "SHOALMATE__CLUSTER_C__SECRET_KEY": "test_secret_key_c",
     }
+    get_settings.cache_clear()
     mocker.patch.dict(os.environ, env_vars, clear=True)
-    settings = Settings()
-
-    # If the test changes Settings objects, it is consistent across the test
-    mocker.patch('shoalmate.allocator.get_settings', return_value=settings)
-
-    return settings
+    return get_settings()

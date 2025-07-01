@@ -15,9 +15,9 @@ def test__init_from_remote__data_loaded():
     Requires settings.env to be loaded and a connection to MinIO.
     """
     ranker = Ranker()
-    result = ranker.get(timedelta(hours=26279))
+    result = ranker.get(timedelta(hours=365 * 24 - 1))
     assert result == {
-        ClusterIDEnum.CLUSTER_A: 0.36607143,
-        ClusterIDEnum.CLUSTER_B: 0.08333334,
-        ClusterIDEnum.CLUSTER_C: 0.19345239,
+        ClusterIDEnum.CLUSTER_A: 0.75,
+        ClusterIDEnum.CLUSTER_B: 0.4732143,
+        ClusterIDEnum.CLUSTER_C: 0.42559522,
     }

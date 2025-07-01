@@ -49,9 +49,10 @@ class _Loader:
 
     def _load_list(self) -> tuple[Object]:
         bucket = self._settings.input_bucket_index
+        prefix = self._settings.green_index_object_name_prefix
         objects = tuple(
             sorted(
-                self._client.list_objects(bucket),
+                self._client.list_objects(bucket, prefix=prefix),
                 key=lambda obj: obj.object_name
             )
         )
