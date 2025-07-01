@@ -20,19 +20,34 @@ Defined by Alex and Orestis  on 2025-06-25
 3. Backpressure when `proc/` is full
 
 
-## Testing
+## How to develop
 
-By default, running `pytest` will only execute unit tests. To run unit tests, use:
+### Prepare the local environment
 
+1. `uv sync --dev`
+2. `source .venv/bin/activate`
+3. `pre-commit install`
+
+### Run locally
+
+1. Copy `[example.env](example.env)` to `.env` and substitute valid values
+2. `PYTHONPATH=src python -m shoalmate.main`
+
+
+### Testing
+
+Run static code validation for all files:
 ```bash
-pytest -m e2e
+pre-commit run --all
+```
+
+Run unit tests:
+```bash
+pytest
 ```
 
 To run e2e tests that require real connections to external systems.
-
 ```bash
 source .env
 pytest -m "e2e"
 ```
-
-You can use `example.env` to create `.env` file with credentials.
