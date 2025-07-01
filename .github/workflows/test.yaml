@@ -26,14 +26,15 @@ jobs:
           pip install uv
           uv sync --dev
 
+      - name: pre-commit
+        run: uv run pre-commit
+
       - name: Run tests
         env:
           PYTHONPATH: ${{ github.workspace }}/src
-        run: |
-          uv run pytest src/tests/
+        run: uv run pytest src/tests/
 
   trigger-build:
     needs: test
     if: startsWith(github.ref, 'refs/tags/')
     uses: ./.github/workflows/build.yaml
-      

@@ -1,6 +1,6 @@
 [project]
 name = "glaciation-uc4-shoalmate"
-version = "0.1.0"
+version = "0.0.0"
 description = "Multi-cluster data orchestrator for GLACIATION use case 4"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -11,8 +11,11 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=8.0.0",
+    "mypy>=1.8.0",
+    "pre-commit>=3.6.0",
     "pytest-mock>=3.14.1",
+    "pytest>=8.0.0",
+    "ruff>=0.3.0",
 ]
 
 [tool.mypy]
@@ -29,3 +32,6 @@ addopts = '-m "not e2e"'
 dev = [
     "pytest-minio-mock>=0.4.18",
 ]
+
+[tool.ruff]
+target-version = "py313"
