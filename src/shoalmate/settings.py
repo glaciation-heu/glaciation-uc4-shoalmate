@@ -32,6 +32,7 @@ class Settings(BaseSettings):
     input_bucket_chunks: str = "chunks"
     input_bucket_index: str = "green-index"
     output_bucket: str = "proc"
+    output_bucket_capacity: int = 10
 
     # Threshold for considering ranks similar enough to prefer the current cluster
     rank_similarity_threshold: float = 0.001

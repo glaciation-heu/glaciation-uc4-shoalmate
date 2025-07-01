@@ -103,3 +103,39 @@ def test__run_with_no_objects__nothing_moved(orchestrator_mock):
         ObjectsCount(0, 0),
     )
     assert get_bucket_counts() == expected
+
+
+def test__run_when_target_is_busy__wait_while_busy(mocker, orchestrator_mock):
+    # Arrange
+    sleep_mock = mocker.patch("shoalmate.orchestrator.sleep")
+    mocker.patch.object(orchestrator_mock, "_get_output_count", side_effect=[11, 10])
+    client = get_client(ClusterIDEnum.CLUSTER_A)
+    client.put_object(
+        bucket_name=get_settings().input_bucket_chunks,
+        object_name="SCADA_siteA_year1_1.parquet",
+        data=bytes(),
+        length=0,
+    )
+
+    # Act
+    orchestrator_mock.run_once()
+
+    # Assert
+    sleep_mock.assert_called_once_with(orchestrator_mock._sleep_time)
+
+
+def test__call_get_output_count__return_count(orchestrator_mock):
+    # Arrange
+    client = get_client(ClusterIDEnum.CLUSTER_A)
+    client.put_object(
+        bucket_name=get_settings().output_bucket,
+        object_name="test_object.parquet",
+        data=bytes(),
+        length=0,
+    )
+
+    # Act
+    result = orchestrator_mock._get_output_count(ClusterIDEnum.CLUSTER_A)
+
+    # Assert
+    assert result == 1
