@@ -40,11 +40,6 @@ class Orchestrator:
 
     def _move(self, obj: Object) -> None:
         time_offset = self._get_time_offset_from_name(obj.object_name)  # type: ignore[arg-type]
-
-        # This line adapts timeline to a requirement to use a single year dataset.
-        # TODO: replace when introduce clock module
-        time_offset -= timedelta(days=365) * time_offset.days // 365
-
         target_cluster_id = self._allocator.get_target_cluster(time_offset)
         logging.info(f"Moving {obj.object_name} to cluster {target_cluster_id}")
         target_client = get_client(target_cluster_id)
@@ -66,6 +61,7 @@ class Orchestrator:
     @classmethod
     def _get_time_offset_from_name(cls, object_name: str) -> timedelta:
         match = cls._object_name_regexp.fullmatch(object_name)
-        year, minutes = match.groups()  # type: ignore[union-attr]
-        total_minutes = int(year) * 365 * 24 * 60 + int(minutes)
-        return timedelta(minutes=total_minutes)
+        _year, minutes = match.groups()  # type: ignore[union-attr]
+        total_minutes = int(minutes)
+        time_offset = timedelta(minutes=total_minutes)
+        return time_offset
