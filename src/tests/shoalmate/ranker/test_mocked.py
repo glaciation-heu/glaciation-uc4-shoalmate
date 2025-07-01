@@ -27,7 +27,7 @@ TEST_TIMELINE = (
 
 @pytest.fixture(autouse=True)
 def loader_mock():
-    with patch('shoalmate.ranker._Loader') as mock_loader_class:
+    with patch("shoalmate.ranker._Loader") as mock_loader_class:
         mock_loader_instance = mock_loader_class.return_value
         mock_loader_instance.load.return_value = TEST_TIMELINE
         yield mock_loader_instance
@@ -52,7 +52,7 @@ def test__call_get_with_valid_fractional_offset__valid_response():
         (-1, "Time offset cannot be negative"),
         (3, "Time offset exceeds available timeline length"),
         (4, "Time offset exceeds available timeline length"),
-    ]
+    ],
 )
 def test__call_get_with_invalid_offset__raise(hours_offset, error):
     ranker = Ranker()

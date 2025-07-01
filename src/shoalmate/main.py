@@ -3,10 +3,7 @@ import logging
 from shoalmate.orchestrator import Orchestrator
 
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(levelname)s - %(message)s'
-)
+logging.basicConfig(level=logging.INFO, format="%(levelname)s - %(message)s")
 
 
 def main() -> None:

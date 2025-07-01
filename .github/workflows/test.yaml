@@ -27,7 +27,7 @@ jobs:
           uv sync --dev
 
       - name: pre-commit
-        run: uv run pre-commit
+        run: uv run pre-commit run --all
 
       - name: Run tests
         env:

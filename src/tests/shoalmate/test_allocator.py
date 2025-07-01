@@ -8,7 +8,7 @@ from shoalmate.settings import ClusterIDEnum
 
 @pytest.fixture
 def ranker_mock(mocker):
-    ranker_mock = mocker.patch('shoalmate.allocator.Ranker')
+    ranker_mock = mocker.patch("shoalmate.allocator.Ranker")
     return ranker_mock.return_value
 
 
@@ -23,7 +23,7 @@ def ranker_mock(mocker):
                 ClusterIDEnum.CLUSTER_C: 0.3,
             },
             ClusterIDEnum.CLUSTER_A,
-            id="Stays on current cluster when high rank"
+            id="Stays on current cluster when high rank",
         ),
         pytest.param(
             ClusterIDEnum.CLUSTER_B,
@@ -33,7 +33,7 @@ def ranker_mock(mocker):
                 ClusterIDEnum.CLUSTER_C: 0.3,
             },
             ClusterIDEnum.CLUSTER_A,
-            id="Change cluster when high rank"
+            id="Change cluster when high rank",
         ),
         pytest.param(
             ClusterIDEnum.CLUSTER_B,
@@ -43,9 +43,9 @@ def ranker_mock(mocker):
                 ClusterIDEnum.CLUSTER_C: 0.0003,
             },
             ClusterIDEnum.CLUSTER_B,
-            id="Do not change cluster when small ranks"
+            id="Do not change cluster when small ranks",
         ),
-    ]
+    ],
 )
 def test__call__valid_response(
     mocker,

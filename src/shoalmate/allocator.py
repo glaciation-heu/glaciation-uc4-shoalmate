@@ -13,7 +13,7 @@ class Allocator:
 
     def get_target_cluster(self, time_offset: timedelta) -> ClusterIDEnum:
         ranks = self._ranker.get(time_offset)
-        cluster_id = max(ranks, key=ranks.get)
+        cluster_id = max(ranks, key=ranks.get)  # type: ignore[arg-type]
         threshold = self._settings.rank_similarity_threshold
         current_cluster_id = self._settings.cluster_id
         if (ranks[cluster_id] - ranks[current_cluster_id]) <= threshold:

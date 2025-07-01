@@ -10,17 +10,11 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = [
-    "mypy>=1.8.0",
-    "pre-commit>=3.6.0",
-    "pytest-mock>=3.14.1",
-    "pytest>=8.0.0",
-    "ruff>=0.3.0",
-]
 
 [tool.mypy]
 python_version = "3.13"
 strict = true
+exclude = ["src/tests/"]
 
 [tool.pytest.ini_options]
 markers = [
@@ -30,7 +24,12 @@ addopts = '-m "not e2e"'
 
 [dependency-groups]
 dev = [
+    "mypy>=1.8.0",
+    "pre-commit>=3.6.0",
     "pytest-minio-mock>=0.4.18",
+    "pytest-mock>=3.14.1",
+    "pytest>=8.0.0",
+    "ruff>=0.3.0",
 ]
 
 [tool.ruff]

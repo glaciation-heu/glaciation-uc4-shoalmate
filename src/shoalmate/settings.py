@@ -13,14 +13,13 @@ class ClusterIDEnum(StrEnum):
 
 class MinioSettings(BaseModel):
     access_key: str
-    host: str = 'minio.uc4-minio.svc.cluster.local'
+    host: str = "minio.uc4-minio.svc.cluster.local"
     port: int = 80
     secret_key: str
     secure: bool = False
 
 
 class Settings(BaseSettings):
-
     # Current cluster
     cluster_id: ClusterIDEnum
 
@@ -30,24 +29,24 @@ class Settings(BaseSettings):
     cluster_c: MinioSettings
 
     # MinIO buckets
-    input_bucket_chunks: str = 'chunks'
-    input_bucket_index: str = 'green-index'
-    output_bucket: str = 'proc'
+    input_bucket_chunks: str = "chunks"
+    input_bucket_index: str = "green-index"
+    output_bucket: str = "proc"
 
     # Threshold for considering ranks similar enough to prefer the current cluster
     rank_similarity_threshold: float = 0.001
 
     # Green Energy Index dataset name prefix.
     # Use a full object name to limit loading to a single file.
-    green_index_object_name_prefix: str = 'GI_year0.csv'
+    green_index_object_name_prefix: str = "GI_year0.csv"
 
     model_config = SettingsConfigDict(
-        env_prefix='shoalmate__',
-        env_nested_delimiter='__',
+        env_prefix="shoalmate__",
+        env_nested_delimiter="__",
     )
 
 
 @lru_cache
 def get_settings() -> Settings:
     # noinspection PyArgumentList
-    return Settings()
+    return Settings()  # type: ignore[call-arg]

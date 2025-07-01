@@ -25,7 +25,7 @@ def get_bucket_counts() -> ClusterCounts:
         client = get_client(cluster_id)
         object_counts = ObjectsCount(
             len(list(client.list_objects(settings.input_bucket_chunks))),
-            len(list(client.list_objects(settings.output_bucket)))
+            len(list(client.list_objects(settings.output_bucket))),
         )
         result.append(object_counts)
     return ClusterCounts(*result)
@@ -42,8 +42,10 @@ def minio_clusters_mock(minio_mock, settings_mock):
 
 @pytest.fixture
 def allocator_mock(mocker):
-    allocator_mock = mocker.patch('shoalmate.orchestrator.Allocator')
-    allocator_mock.return_value.get_target_cluster.return_value = ClusterIDEnum.CLUSTER_A
+    allocator_mock = mocker.patch("shoalmate.orchestrator.Allocator")
+    allocator_mock.return_value.get_target_cluster.return_value = (
+        ClusterIDEnum.CLUSTER_A
+    )
     return allocator_mock.return_value
 
 
@@ -62,10 +64,12 @@ def test__run_when_no_objects__no_action(orchestrator_mock):
         ObjectsCount(0, 0),
     )
     assert get_bucket_counts() == expected
-    
+
 
 @pytest.mark.parametrize("allocated_cluster", ClusterIDEnum)
-def test__run_with_one_object__moved_to_the_right_cluster(orchestrator_mock, allocator_mock, allocated_cluster):
+def test__run_with_one_object__moved_to_the_right_cluster(
+    orchestrator_mock, allocator_mock, allocated_cluster
+):
     # Arrange
     client = get_client(ClusterIDEnum.CLUSTER_A)
     client.put_object(
