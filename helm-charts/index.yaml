@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   shoalmate:
   - apiVersion: v2
+    appVersion: 0.1.10
+    created: "2025-07-01T11:34:59.559461929Z"
+    description: A Helm chart for Shoalmate
+    digest: fdfeaf1e8dc1bbe281c58b4925d77572660fd37beb95f8b98f4a2cf32eaca762
+    name: shoalmate
+    type: application
+    urls:
+    - https://glaciation-heu.github.io/glaciation-uc4-shoalmate/helm-charts/shoalmate-0.1.10.tgz
+    version: 0.1.10
+  - apiVersion: v2
     appVersion: 0.1.9
     created: "2025-07-01T11:16:12.209560319Z"
     description: A Helm chart for Shoalmate
@@ -121,4 +131,4 @@ entries:
     urls:
     - https://glaciation-heu.github.io/glaciation-uc4-shoalmate/helm-charts/shoalmate-0.0.5.tgz
     version: 0.0.5
-generated: "2025-07-01T11:16:12.209269563Z"
+generated: "2025-07-01T11:34:59.559038888Z"
