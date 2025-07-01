@@ -20,7 +20,7 @@ Defined by Alex and Orestis  on 2025-06-25
 3. Backpressure when `proc/` is full
 
 
-## How to develop
+## Development
 
 ### Prepare the local environment
 
@@ -30,11 +30,11 @@ Defined by Alex and Orestis  on 2025-06-25
 
 ### Run locally
 
-1. Copy `[example.env](example.env)` to `.env` and substitute valid values
+1. Copy `example.env` to `.env` and substitute valid values
 2. `PYTHONPATH=src python -m shoalmate.main`
 
 
-### Testing
+### Test
 
 Run static code validation for all files:
 ```bash
