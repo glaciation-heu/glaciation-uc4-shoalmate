@@ -2,24 +2,6 @@
 
 Multi-cluster data orchestrator for GLACIATION use case 4.
 
-# Todo
-Defined by Alex and Orestis on 2025-06-25
-1. Add a control for the time ticking in Shoalmate
-   - Control plane
-     - Simulated time
-       - Value
-       - Start, stop, and reset buttons
-     - Green Index for all custers
-     - How many files in `proc/` of each cluster now
-     - Tune proc/ capacity
-   - No need to sync cluster times
-   - Every time tick should produce a log record
-     - Real time and simulated time
-
-2. Use only one year of Green Index data (done)
-3. Backpressure when `proc/` is full (done)
-
-
 ## Development
 
 ### Prepare the local environment
@@ -51,3 +33,35 @@ To run e2e tests that require real connections to external systems.
 source .env
 pytest -m "e2e"
 ```
+
+## Changelog
+
+### [v0.3.0] - Planned on 2025-07-11
+#### Added
+- New virtual clock feature to select Green Energy Index values. before this update chucnk filename is used instead.
+- Web UI to control the virtual clock state:
+
+#### Virtual Clock requirements
+- Control plane
+  - Simulated time
+    - Value
+    - Start, stop, and reset buttons
+  - Green Index for all custers
+  - How many files in `proc/` of each cluster now
+  - Tune proc/ capacity
+- No need to sync cluster times
+- Every time tick should produce a log record
+  - Real time and simulated time
+
+### [v0.2.0] - 2025-07-03
+#### Added
+- Use only one year of Green Energy Index data.
+- Added target backpressure feature. If the target bucket has more than 10 objects, Shoalmate will wait till it has
+  less.
+
+#### Changed
+- Mypy and ruff static code checkers are added as Git hooks to the CI pipeline.
+- Unit test coverage increased to 90%
+
+### [v0.1.4] - 2025-06-25
+The initial version of Shoalmate demonstrated in Integration cluster.
