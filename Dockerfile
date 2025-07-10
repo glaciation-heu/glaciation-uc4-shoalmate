@@ -5,10 +5,9 @@ RUN --mount=type=bind,source=uv.lock,target=uv.lock \
     apk update &&  \
     pip install uv && \
     uv sync --locked --no-dev
-COPY src/shoalmate /app/src/shoalmate
+COPY src/shoalmate src/timesim /app/src/
 
 FROM python:3.13-alpine
 COPY --from=builder --chown=app:app /app /app
 ENV PATH="/app/.venv/bin:$PATH" \
     PYTHONPATH="/app/src"
-CMD ["python", "-m", "shoalmate.main"]

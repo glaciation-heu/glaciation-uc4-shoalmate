@@ -7,3 +7,14 @@ shoalmate:
     limits:
       cpu: "1"
       memory: "1G"
+
+timesim:
+  resources:
+    requests:
+      cpu: "0.1"
+      memory: "100M"
+    limits:
+      cpu: "1"
+      memory: "500M"
+
+ingressHostName: shoalmate

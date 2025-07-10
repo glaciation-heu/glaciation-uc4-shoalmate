@@ -17,6 +17,7 @@ spec:
       containers:
         - name: shoalmate
           image: "ghcr.io/glaciation-heu/shoalmate:{{ .Chart.AppVersion }}"
+          command: ["python", "-m", "shoalmate.main"]
           resources:
             requests:
               cpu: {{ .Values.shoalmate.resources.requests.cpu }}

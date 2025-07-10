@@ -1,4 +1,3 @@
-import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 
@@ -16,7 +15,3 @@ async def get_timestamp() -> int:
     Return a number of seconds since the beginning of simulated time.
     """
     return 42
-
-
-if __name__ == "__main__":
-    uvicorn.run(app)
