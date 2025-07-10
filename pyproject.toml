@@ -5,6 +5,7 @@ description = "Multi-cluster data orchestrator for GLACIATION use case 4"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "fastapi>=0.116.0",
     "minio>=7.2.15",
     "pydantic-settings>=2.9.1",
 ]
