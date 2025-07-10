@@ -29,7 +29,7 @@ dev = [
     "pytest-minio-mock>=0.4.18",
     "pytest-mock>=3.14.1",
     "pytest>=8.0.0",
-    "ruff>=0.3.0",
+    "ruff>=0.12.2",
     "pytest-cov>=6.2.1",
 ]
 
