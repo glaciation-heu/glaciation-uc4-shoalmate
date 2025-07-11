@@ -17,7 +17,7 @@ spec:
       containers:
         - name: shoalmate
           image: "ghcr.io/glaciation-heu/shoalmate:{{ .Chart.AppVersion }}"
-          command: ["fastapi", "run", "timesim/main.py"]
+          command: ["fastapi", "run", "/app/src/timesim/main.py"]
           ports:
             - containerPort: 8000
               name: http
