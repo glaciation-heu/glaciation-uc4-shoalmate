@@ -28,6 +28,3 @@ spec:
             limits:
               cpu: {{ .Values.timesim.resources.limits.cpu }}
               memory: {{ .Values.timesim.resources.limits.memory }}
-          envFrom:
-            - secretRef:
-                name: {{ .Values.timesim.secretName }}
