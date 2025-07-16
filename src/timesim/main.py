@@ -4,7 +4,9 @@ from fastapi.responses import HTMLResponse
 from timesim.api import router as api_router
 
 
-app = FastAPI(title="Time Simulator API")
+app = FastAPI(
+    title="Time Simulator API", swagger_ui_parameters={"defaultModelsExpandDepth": -1}
+)
 app.include_router(api_router, prefix="/api", tags=["API"])
 
 
