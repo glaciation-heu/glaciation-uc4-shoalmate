@@ -53,7 +53,6 @@ def test__call_get__valid_response(create_timesim, client):
     )
 
 
-@pytest.mark.skip(reason="Not implemented yet")  # TODO
 def test__call_post_twice__error(create_timesim, client):
     response = client.post("/api/timesim", json=DEFAULT_CREATE_ARGS)
     assert response.status_code == 409

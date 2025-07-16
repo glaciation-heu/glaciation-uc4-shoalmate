@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 
@@ -42,9 +42,14 @@ async def get_timesim(clock: ClockDependency) -> TimeSim:
     return state
 
 
-@router.post("/timesim")
+@router.post(
+    "/timesim",
+    responses={409: {"description": "Time simulation is already active"}},
+)
 async def create_timesim(clock: ClockDependency, params: TimeSimCreate) -> TimeSim:
     """Start a new time simulation."""
+    if clock.is_active:
+        raise HTTPException(status_code=409, detail="Time simulation is already active")
     clock.virtual_sec_per_minute = params.minutes_per_hour
     clock.experiment_tag = params.experiment_tag
     clock.activate()
