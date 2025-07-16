@@ -1,9 +1,11 @@
+import logging
 from fastapi import FastAPI
 
 from fastapi.responses import HTMLResponse
 from timesim.api import router as api_router
 
 
+logging.basicConfig(level=logging.INFO)
 app = FastAPI(title="Time Simulator API")
 app.include_router(api_router, prefix="/api", tags=["API"])
 
