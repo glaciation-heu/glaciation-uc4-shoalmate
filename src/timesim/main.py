@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 
+from timesim.clock import ClockDependency
+
 app = FastAPI(title="TimeSim API")
 
 
@@ -10,8 +12,8 @@ async def redirect_to_docs() -> RedirectResponse:
 
 
 @app.get("/timestamp")
-async def get_timestamp() -> int:
+async def get_timestamp(clock: ClockDependency) -> float:
     """
     Return a number of seconds since the beginning of simulated time.
     """
-    return 42
+    return clock.get_virtual_sec()

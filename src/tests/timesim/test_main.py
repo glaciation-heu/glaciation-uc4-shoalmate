@@ -18,4 +18,4 @@ def test__get_root__redirects_to_docs(client):
 def test__get_timestamp__timestamp_returned(client):
     response = client.get("/timestamp")
     assert response.status_code == 200
-    assert response.json() == 42
+    assert 0 <= response.json() <= 0.1
