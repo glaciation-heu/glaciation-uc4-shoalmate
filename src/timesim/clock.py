@@ -1,4 +1,5 @@
 from datetime import datetime
+from functools import lru_cache
 from typing import Annotated
 
 from fastapi import Depends
@@ -21,4 +22,9 @@ class Clock:
         return sim_delta.total_seconds()
 
 
-ClockDependency = Annotated[Clock, Depends(Clock)]
+@lru_cache
+def _get_clock() -> Clock:
+    return Clock()
+
+
+ClockDependency = Annotated[Clock, Depends(_get_clock)]
