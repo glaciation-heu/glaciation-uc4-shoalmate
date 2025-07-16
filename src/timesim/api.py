@@ -38,7 +38,7 @@ async def get_timesim(clock: ClockDependency) -> Timesim:
         experiment_duration_sec=clock.real_sec,
         experiment_tag="experiment-1",
         is_active=clock.is_active,
-        minutes_per_hour=clock.virtual_sec_per_minute,
+        minutes_per_hour=clock.virtual_sec_per_real_minute,
         virtual_time_sec=clock.virtual_sec,
     )
     return state
@@ -52,7 +52,7 @@ async def create_experiment(clock: ClockDependency, params: ExperimentCreate) ->
     """Start a new time simulation experiment."""
     if clock.is_active:
         raise HTTPException(status_code=409, detail="Time simulation is already active")
-    clock.virtual_sec_per_minute = params.minutes_per_hour
+    clock.virtual_sec_per_real_minute = params.minutes_per_hour
     clock.experiment_tag = params.experiment_tag
     clock.activate()
     return None

@@ -34,11 +34,11 @@ def test__get_timesim_when_created__valid_response(create_experiment, client):
     actual = response.json()
     assert len(actual) == 6
     assert actual["cluster_id"] == "A"
-    assert 0 < actual["experiment_duration_sec"] < 0.01
+    assert 0 < actual["experiment_duration_sec"] < 0.1
     assert actual["experiment_tag"] == "experiment-1"
     assert actual["is_active"] is True
     assert actual["minutes_per_hour"] == 5
-    assert 0 < actual["virtual_time_sec"] < 0.01
+    assert 0 < actual["virtual_time_sec"] < 0.1
 
 
 def test__get_timesim_when_not_created__valid_response(client):

@@ -16,7 +16,7 @@ class Clock:
     _start_time: datetime | None = None
     _now: datetime | None = None
 
-    virtual_sec_per_minute: int = 60
+    virtual_sec_per_real_minute: int = 60
 
     def __init__(self, logger: Logger):
         self._logger = logger
@@ -45,7 +45,7 @@ class Clock:
     def virtual_sec(self) -> float | None:
         result = None
         if self.is_active:
-            result = self.real_sec * self.virtual_sec_per_minute / 60
+            result = self.real_sec / self.virtual_sec_per_real_minute * 60
         return result
 
     @property
