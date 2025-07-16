@@ -21,19 +21,13 @@ def test__get_api_root__redirects_to_docs(client):
     assert response.headers["location"] == "/docs"
 
 
-def test__get_api_timestamp__timestamp_returned(client):
-    response = client.get("/api/timestamp")
-    assert response.status_code == 200
-    assert 0 <= response.json() <= 0.1
-
-
-def test__get_api_state__timestamp_returned(client):
-    response = client.get("/api/state")
+def test__get_api_timesim__timestamp_returned(client):
+    response = client.get("/api/timesim")
     assert response.status_code == 200
     actual = response.json()
     assert len(actual) == 5
     assert actual["cluster_id"] == "A"
-    assert 0 < actual["experiment_duration_sec"] < 0.01
+    assert actual["experiment_duration_sec"] == 0
     assert actual["experiment_tag"] == "experiment-1"
     assert actual["minutes_per_hour"] == 60
-    assert 0 < actual["virtual_time_sec"] < 0.01
+    assert actual["virtual_time_sec"] == 0

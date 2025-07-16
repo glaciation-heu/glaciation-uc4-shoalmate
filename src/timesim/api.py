@@ -8,7 +8,7 @@ from timesim.clock import ClockDependency
 router = APIRouter()
 
 
-class State(BaseModel):
+class TimeSim(BaseModel):
     experiment_duration_sec: float
     minutes_per_hour: int
     virtual_time_sec: float
@@ -22,20 +22,11 @@ async def redirect_to_docs() -> RedirectResponse:
     return RedirectResponse(url="/docs", status_code=307)
 
 
-@router.get("/timestamp")
-async def get_timestamp(clock: ClockDependency) -> float:
-    """
-    Return a number of seconds since the beginning of simulated time.
-    """
+@router.get("/timesim")
+async def get_timesim(clock: ClockDependency) -> TimeSim:
+    """Get state of the time simulator."""
     clock.tick()
-    return clock.virtual_sec
-
-
-@router.get("/state")
-async def get_state(clock: ClockDependency) -> State:
-    """Return UI state"""
-    clock.tick()
-    state = State(
+    state = TimeSim(
         experiment_duration_sec=clock.real_sec,
         minutes_per_hour=clock.virtual_sec_per_minute,
         virtual_time_sec=clock.virtual_sec,
