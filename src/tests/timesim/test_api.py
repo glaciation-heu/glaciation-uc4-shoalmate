@@ -1,8 +1,7 @@
 import pytest
 from httpx import Response
-from pytest import approx
 
-from timesim.api import TimeSim
+from timesim.api import Timesim
 
 DEFAULT_CREATE_ARGS = {
     "experiment_tag": "experiment-1",
@@ -11,8 +10,8 @@ DEFAULT_CREATE_ARGS = {
 
 
 @pytest.fixture
-def create_timesim(client) -> Response:
-    response = client.post("/api/timesim", json=DEFAULT_CREATE_ARGS)
+def create_experiment(client) -> Response:
+    response = client.post("/api/timesim/experiment", json=DEFAULT_CREATE_ARGS)
     return response
 
 
@@ -22,8 +21,15 @@ def test__get_root__redirects_to_docs(client):
     assert response.headers["location"] == "/docs"
 
 
-def test__post_once__timesim_activated(create_timesim):
-    response = create_timesim
+def test__post_experiment_once__experiment_activated(create_experiment):
+    response = create_experiment
+    assert response.status_code == 200
+    assert response.json() is None
+
+
+def test__get_timesim_when_created__valid_response(create_experiment, client):
+    response = client.get("/api/timesim")
+
     assert response.status_code == 200
     actual = response.json()
     assert len(actual) == 6
@@ -35,27 +41,12 @@ def test__post_once__timesim_activated(create_timesim):
     assert 0 < actual["virtual_time_sec"] < 0.01
 
 
-def test__get_when_created__valid_response(create_timesim, client):
+def test__get_timesim_when_not_created__valid_response(client):
     response = client.get("/api/timesim")
 
     assert response.status_code == 200
-    expected = TimeSim.model_validate_json(create_timesim.text)
-    actual = TimeSim.model_validate_json(response.text)
-    assert actual.virtual_time_sec - expected.virtual_time_sec == approx(0, abs=0.01)
-    assert actual.experiment_duration_sec - expected.experiment_duration_sec == approx(
-        0, abs=0.01
-    )
-    actual.virtual_time_sec = expected.virtual_time_sec
-    actual.experiment_duration_sec = expected.experiment_duration_sec
-    assert actual == expected
-
-
-def test__get_when_not_created__valid_response(client):
-    response = client.get("/api/timesim")
-
-    assert response.status_code == 200
-    actual = TimeSim.model_validate_json(response.text)
-    expected = TimeSim(
+    actual = Timesim.model_validate_json(response.text)
+    expected = Timesim(
         cluster_id="A",
         experiment_duration_sec=None,
         experiment_tag="experiment-1",
@@ -66,21 +57,21 @@ def test__get_when_not_created__valid_response(client):
     assert actual == expected
 
 
-def test__post_twice__error(create_timesim, client):
-    response = client.post("/api/timesim", json=DEFAULT_CREATE_ARGS)
+def test__post_experiment_twice__error(create_experiment, client):
+    response = client.post("/api/timesim/experiment", json=DEFAULT_CREATE_ARGS)
     assert response.status_code == 409
 
 
-def test__delete_once__deactivated(create_timesim, client):
-    response = client.delete("/api/timesim")
+def test__delete_experiment_once__deactivated(create_experiment, client):
+    response = client.delete("/api/timesim/experiment")
     assert response.status_code == 200
     assert response.json() is None
 
 
-def test__call_delete_twice__deactivated(create_timesim, client):
-    client.delete("/api/timesim")
+def test__delete_experiment_twice__deactivated(create_experiment, client):
+    client.delete("/api/timesim/experiment")
 
-    response = client.delete("/api/timesim")
+    response = client.delete("/api/timesim/experiment")
 
     assert response.status_code == 200
     assert response.json() is None
