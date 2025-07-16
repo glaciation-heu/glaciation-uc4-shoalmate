@@ -15,7 +15,6 @@ class State(BaseModel):
 
     cluster_id: str = "A"
     experiment_tag: str = "experiment-1"
-    output_bucket_capacity: int = 10
 
 
 @router.get("/", include_in_schema=False)

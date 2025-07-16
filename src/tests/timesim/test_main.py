@@ -31,10 +31,9 @@ def test__get_api_state__timestamp_returned(client):
     response = client.get("/api/state")
     assert response.status_code == 200
     actual = response.json()
-    assert len(actual) == 6
+    assert len(actual) == 5
     assert actual["cluster_id"] == "A"
     assert 0 < actual["experiment_duration_sec"] < 0.01
     assert actual["experiment_tag"] == "experiment-1"
     assert actual["minutes_per_hour"] == 60
-    assert actual["output_bucket_capacity"] == 10
     assert 0 < actual["virtual_time_sec"] < 0.01
