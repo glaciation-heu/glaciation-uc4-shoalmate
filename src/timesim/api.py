@@ -9,12 +9,17 @@ router = APIRouter()
 
 
 class TimeSim(BaseModel):
-    experiment_duration_sec: float
+    cluster_id: str
+    experiment_duration_sec: float | None
+    experiment_tag: str
+    is_active: bool
     minutes_per_hour: int
-    virtual_time_sec: float
+    virtual_time_sec: float | None
 
-    cluster_id: str = "A"
-    experiment_tag: str = "experiment-1"
+
+class TimeSimCreate(BaseModel):
+    minutes_per_hour: int
+    experiment_tag: str
 
 
 @router.get("/", include_in_schema=False)
@@ -24,11 +29,29 @@ async def redirect_to_docs() -> RedirectResponse:
 
 @router.get("/timesim")
 async def get_timesim(clock: ClockDependency) -> TimeSim:
-    """Get state of the time simulator."""
+    """Get a time simulation state."""
     clock.tick()
     state = TimeSim(
+        cluster_id="A",
         experiment_duration_sec=clock.real_sec,
+        experiment_tag="experiment-1",
+        is_active=clock.is_active,
         minutes_per_hour=clock.virtual_sec_per_minute,
         virtual_time_sec=clock.virtual_sec,
     )
     return state
+
+
+@router.post("/timesim")
+async def create_timesim(clock: ClockDependency, params: TimeSimCreate) -> TimeSim:
+    """Start a new time simulation."""
+    clock.virtual_sec_per_minute = params.minutes_per_hour
+    clock.experiment_tag = params.experiment_tag
+    clock.activate()
+    return await get_timesim(clock)
+
+
+@router.delete("/timesim")
+async def delete_timesim(clock: ClockDependency) -> None:
+    """Stop time simulation."""
+    clock.deactivate()

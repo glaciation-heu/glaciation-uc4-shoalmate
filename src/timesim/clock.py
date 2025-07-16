@@ -11,33 +11,50 @@ from timesim.logger import LoggerDependency
 class Clock:
     """Clock runs time simulation."""
 
-    _start_time: datetime
-    _now: datetime
     _logger: Logger
+
+    _start_time: datetime | None = None
+    _now: datetime | None = None
 
     virtual_sec_per_minute: int = 60
 
     def __init__(self, logger: Logger):
         self._logger = logger
 
+    def activate(self):
+        if self._start_time:
+            raise RuntimeError("Clock is already started")
+        self._start_time = datetime.now()
+        self._logger.info("Clock started at %s", self._start_time)
+
+    def deactivate(self):
+        self._start_time = None
+        self._now = None
+        self._logger.info("Clock reset")
+
     def tick(self):
-        if not hasattr(self, "_start_time"):
-            self._start_time = datetime.now()
-            self._now = self._start_time
-            self._logger.info("New clock started")
-        else:
+        if self._start_time:
             self._now = datetime.now()
-        self._logger.info("Clock ticked at %s", self._now)
+            self._logger.info("Clock ticked at %s", self._now)
 
     @property
-    def virtual_sec(self) -> float:
-        result = self.real_sec
-        return result * self.virtual_sec_per_minute / 60
+    def is_active(self) -> bool:
+        return self._start_time is not None
 
     @property
-    def real_sec(self) -> float:
-        delta = self._now - self._start_time
-        return delta.total_seconds()
+    def virtual_sec(self) -> float | None:
+        result = None
+        if self.is_active:
+            result = self.real_sec * self.virtual_sec_per_minute / 60
+        return result
+
+    @property
+    def real_sec(self) -> float | None:
+        result = None
+        if self.is_active:
+            delta = self._now - self._start_time
+            result = delta.total_seconds()
+        return result
 
 
 @lru_cache
