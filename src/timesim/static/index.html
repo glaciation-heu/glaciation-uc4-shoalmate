@@ -63,45 +63,58 @@
         async function updateRows() {
             const response = await fetch('/api/timesim');
             const data = await response.json();
-            document.querySelector('#cluster-id .value').textContent = data.cluster_id;
-            document.querySelector('#virtual-time .value').textContent = data.virtual_time_sec;
-            document.querySelector('#experiment-duration .value').textContent = data.experiment_duration_sec;
+            document.getElementById('cluster-id').textContent = data.cluster_id;
+            document.getElementById('virtual-time').textContent = data.virtual_time_sec;
+            document.getElementById('experiment-duration').textContent = data.experiment_duration_sec;
         }
 
         updateRows();
+
+        async function startExperiment() {
+            await fetch('/api/timesim/experiment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    minutes_per_hour: document.getElementById('minuts-per-hour').value,
+                    experiment_tag: document.getElementById('experiment-tag').value
+                })
+            });
+        }
     </script>
 </head>
 <body>
     <h1>Shoalmate</h1>
     <div class=subtitle>Virtual time management console for Shoalmate</div>
     <div class="wrapper">
-        <div class="row" id="cluster-id">
+        <div class="row">
             <div class="key">Cluster ID:</div>
-            <div class="value"></div>
+            <div class="value" id="cluster-id"></div>
         </div>
-        <div class="row" id="virtual-time">
+        <div class="row">
             <div class="key">Virtual time:</div>
-            <div class="value"></div>
+            <div class="value" id="virtual-time"></div>
         </div>
-        <div class="row" id="experiment-duration">
+        <div class="row" >
             <div class="key">Experiment duration:</div>
-            <div class="value"></div>
+            <div class="value" id="experiment-duration"></div>
         </div>
     </div>
-    <form class="wrapper">
+    <div class="wrapper">
         <label class="row">
             <span class="key">Actual minutes perone virtual hour:</span>
             <span class="value">
-                <input type="number" min="1" step="1" value="5"/>
+                <input id="minuts-per-hour" type="number" min="1" step="1" value="5"/>
             </span>
         </label>
         <label class="row">
             <span class="key">Experiment tag:</span>
             <span class="value">
-                <input value="experiment-1"/>
+                <input id="experiment-tag" value="experiment-1"/>
             </span>
         </label>
-        <button>Start</button>
-    </form>
+        <button onclick="startExperiment()">Start</button>
+    </div>
 </body>
 </html>
