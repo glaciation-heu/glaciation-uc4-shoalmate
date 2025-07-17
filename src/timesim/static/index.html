@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Shoalmate Time Simulator</title>
+    <style>
+        * {
+            font-weight: normal;
+            font-family: Arial, sans-serif;
+            font-size: 1em;
+        }
+        body {
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-top: 80px;
+            margin-bottom: 15px;
+        }
+        .subtitle {
+            margin-bottom: 40px;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .key, .value {
+            width: 50%;
+            padding: 7px 14px;
+        }
+        .key {
+            text-align: right;
+
+        }
+        .value {
+            text-align: left;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 15px;
+            width: 100px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        input {
+            padding: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: left;
+        }
+        input[type="number"] {
+            width: 70px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Shoalmate</h1>
+    <div class=subtitle>Virtual time management console</div>
+    <div class="wrapper">
+        <div class="row">
+            <div class="key">Cluster ID:</div>
+            <div class="value">A</div>
+        </div>
+        <div class="row">
+            <div class="key">Virtual time:</div>
+            <div class="value">1d 1h 1s</div>
+        </div>
+        <div class="row">
+            <div class="key">Experiment duration:</div>
+            <div class="value">1d 1h 1s</div>
+        </div>
+    </div>
+    <form class="wrapper">
+        <label class="row">
+            <span class="key">Actual minutes perone virtual hour:</span>
+            <span class="value">
+                <input type="number" min="1" step="1" value="5"/>
+            </span>
+        </label>
+        <label class="row">
+            <span class="key">Experiment tag:</span>
+            <span class="value">
+                <input value="experiment-1"/>
+            </span>
+        </label>
+        <button>Start</button>
+    </form>
+</body>
+</html>
