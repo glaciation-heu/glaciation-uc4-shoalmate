@@ -59,22 +59,33 @@
             width: 70px;
         }
     </style>
+    <script>
+        async function updateRows() {
+            const response = await fetch('/api/timesim');
+            const data = await response.json();
+            document.querySelector('#cluster-id .value').textContent = data.cluster_id;
+            document.querySelector('#virtual-time .value').textContent = data.virtual_time_sec;
+            document.querySelector('#experiment-duration .value').textContent = data.experiment_duration_sec;
+        }
+
+        updateRows();
+    </script>
 </head>
 <body>
     <h1>Shoalmate</h1>
     <div class=subtitle>Virtual time management console for Shoalmate</div>
     <div class="wrapper">
-        <div class="row">
+        <div class="row" id="cluster-id">
             <div class="key">Cluster ID:</div>
-            <div class="value">A</div>
+            <div class="value"></div>
         </div>
-        <div class="row">
+        <div class="row" id="virtual-time">
             <div class="key">Virtual time:</div>
-            <div class="value">1d 1h 1s</div>
+            <div class="value"></div>
         </div>
-        <div class="row">
+        <div class="row" id="experiment-duration">
             <div class="key">Experiment duration:</div>
-            <div class="value">1d 1h 1s</div>
+            <div class="value"></div>
         </div>
     </div>
     <form class="wrapper">
