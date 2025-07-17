@@ -12,4 +12,5 @@ app.include_router(api_router, prefix="/api", tags=["API"])
 
 @app.get("/", include_in_schema=False)
 async def root():
-    return HTMLResponse(content="<h1>Hello, World!</h1>")
+    with open("src/timesim/static/index.html", "r") as file:
+        return HTMLResponse(content=file.read())
