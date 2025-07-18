@@ -1,3 +1,62 @@
+let state = {
+    cluster_id: undefined,
+    experiment_duration_sec: undefined,
+    experiment_tag: undefined,
+    is_active: undefined,
+    minutes_per_hour: undefined,
+    virtual_time_sec: undefined,
+};
+
+
+async function update() {
+    await fetchState();
+    render();
+}
+
+async function fetchState(){
+    const response = await fetch('/api/timesim');
+    state = await response.json();
+}
+
+function render() {
+    document.getElementById('cluster-id').textContent = state.cluster_id;
+    document.getElementById('virtual-time').textContent = formatDuration(state.virtual_time_sec);
+    document.getElementById('experiment-duration').textContent = formatDuration(state.experiment_duration_sec);
+    const button = document.querySelector('button');
+    const inputs = document.querySelectorAll('input');
+    if (state.is_active) {
+        button.textContent = 'Stop';
+        button.setAttribute('onclick', 'onclickButtonStop()');
+        inputs.forEach(input => input.disabled = true);
+    } else {
+        button.textContent = 'Start';
+        button.setAttribute('onclick', 'onclickButtonStart()');
+        inputs.forEach(input => input.disabled = false);
+    }
+}
+
+async function onclickButtonStop() {
+    await fetch('/api/timesim/experiment', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+}
+
+async function onclickButtonStart() {
+    await fetch('/api/timesim/experiment', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            minutes_per_hour: document.getElementById('minuts-per-hour').value,
+            experiment_tag: document.getElementById('experiment-tag').value
+        })
+    });
+}
+
 function formatDuration(seconds_total) {
     let formatted = "-";
     if (seconds_total) {
@@ -13,61 +72,9 @@ function formatDuration(seconds_total) {
     return formatted;
 }
 
-async function updateRows() {
-    const response = await fetch('/api/timesim');
-    const data = await response.json();
-    document.getElementById('cluster-id').textContent = data.cluster_id;
-    document.getElementById('virtual-time').textContent = data.virtual_time_sec;
-    document.getElementById('virtual-time').textContent = formatDuration(data.virtual_time_sec);
-    document.getElementById('experiment-duration').textContent = formatDuration(data.experiment_duration_sec);
-
-    if (data.is_active) {
-        await disableButton();
-    } else {
-        await enableButton();
-    }
-}
-
-async function startExperiment() {
-    await fetch('/api/timesim/experiment', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            minutes_per_hour: document.getElementById('minuts-per-hour').value,
-            experiment_tag: document.getElementById('experiment-tag').value
-        })
-    });
-}
-
-async function stopExperiment() {
-    await fetch('/api/timesim/experiment', {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-}
-
-async function disableButton() {
-    const startButton = document.querySelector('button');
-    startButton.textContent = 'Stop';
-    startButton.setAttribute('onclick', 'enableButton()');
-    await startExperiment();
-}
-
-async function enableButton() {
-    const startButton = document.querySelector('button');
-    startButton.textContent = 'Start';
-    startButton.setAttribute('onclick', 'disableButton()');
-    await stopExperiment();
-}
-
-
 async function main() {
-    await updateRows();
-    setInterval(updateRows, 900);
+    await update();
+    setInterval(async () => update(), 1000);
 }
 
 main();

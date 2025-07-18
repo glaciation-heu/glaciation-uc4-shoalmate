@@ -53,3 +53,6 @@ input {
 input[type="number"] {
     width: 70px;
 }
+input:disabled {
+    background-color: lightgrey;
+}
