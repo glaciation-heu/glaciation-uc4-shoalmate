@@ -38,6 +38,8 @@ function render() {
 }
 
 async function onclickButtonStop() {
+    state.is_active = false;
+    render();
     await fetch('/api/timesim/experiment', {
         method: 'DELETE',
         headers: {
@@ -47,6 +49,8 @@ async function onclickButtonStop() {
 }
 
 async function onclickButtonStart() {
+    state.is_active = true;
+    render();
     await fetch('/api/timesim/experiment', {
         method: 'POST',
         headers: {
