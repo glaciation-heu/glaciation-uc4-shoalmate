@@ -28,10 +28,12 @@ function render() {
         button.textContent = 'Stop';
         button.setAttribute('onclick', 'onclickButtonStop()');
         inputs.forEach(input => input.disabled = true);
+        button.classList.add('danger');
     } else {
         button.textContent = 'Start';
         button.setAttribute('onclick', 'onclickButtonStart()');
         inputs.forEach(input => input.disabled = false);
+        button.classList.remove('danger');
     }
 }
 
