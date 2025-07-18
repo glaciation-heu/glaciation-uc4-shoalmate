@@ -2,6 +2,7 @@
     font-weight: normal;
     font-family: Arial, sans-serif;
     font-size: 1em;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 body {
     text-align: center;
@@ -63,5 +64,6 @@ input[type="number"] {
     width: 70px;
 }
 input:disabled {
-    background-color: lightgrey;
+    background-color: #e3ebf5;
+    border-color: #e3ebf5;
 }
