@@ -46,6 +46,8 @@ function render() {
 
 async function onclickButtonStop() {
     state.is_active = false;
+    state.virtual_time_sec = null;
+    state.experiment_duration_sec = null;
     render();
     await fetch('/api/timesim/experiment', {
         method: 'DELETE',
@@ -59,6 +61,8 @@ async function onclickButtonStart() {
     const minutes_per_hour = document.getElementById("minuts-per-hour").value;
     const experiment_tag = document.getElementById("experiment-tag").value;
     state.is_active = true;
+    state.virtual_time_sec = 0;
+    state.experiment_duration_sec = 0;
     state.minutes_per_hour = minutes_per_hour;
     state.experiment_tag = experiment_tag;
     render();
@@ -76,7 +80,7 @@ async function onclickButtonStart() {
 
 function formatDuration(seconds_total) {
     let formatted = "-";
-    if (seconds_total) {
+    if (seconds_total !== null) {
         const seconds = Math.floor(seconds_total % 60);
         const minutes = Math.floor(seconds_total / 60) % 60;
         const hours = Math.floor(seconds_total / 3600) % 24;
