@@ -1,12 +1,15 @@
 function formatDuration(seconds_total) {
-    const seconds = Math.floor(seconds_total % 60);
-    const minutes = Math.floor(seconds_total / 60) % 60;
-    const hours = Math.floor(seconds_total / 3600) % 24;
-    const days = Math.floor(seconds_total / 86400);
-    let formatted = `${seconds}s`;
-    if (minutes > 0) formatted = `${minutes}h ` + formatted;
-    if (hours > 0) formatted = `${hours}h ` + formatted;
-    if (days > 0) formatted = `${days}d ` + formatted;
+    let formatted = "-";
+    if (seconds_total) {
+        const seconds = Math.floor(seconds_total % 60);
+        const minutes = Math.floor(seconds_total / 60) % 60;
+        const hours = Math.floor(seconds_total / 3600) % 24;
+        const days = Math.floor(seconds_total / 86400);
+        formatted = `${seconds}s`;
+        if (minutes > 0) formatted = `${minutes}h ` + formatted;
+        if (hours > 0) formatted = `${hours}h ` + formatted;
+        if (days > 0) formatted = `${days}d ` + formatted;
+    }
     return formatted;
 }
 
