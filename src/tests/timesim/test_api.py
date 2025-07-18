@@ -49,7 +49,7 @@ def test__get_timesim_when_not_created__valid_response(client):
     expected = Timesim(
         cluster_id="A",
         experiment_duration_sec=None,
-        experiment_tag="experiment-1",
+        experiment_tag="",
         is_active=False,
         minutes_per_hour=60,
         virtual_time_sec=None,

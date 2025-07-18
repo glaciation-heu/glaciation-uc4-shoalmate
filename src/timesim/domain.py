@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from datetime import datetime
 from functools import lru_cache
 from logging import Logger
@@ -57,9 +58,16 @@ class Clock:
         return result
 
 
+@dataclass
+class Experiment:
+    clock: Clock
+    experiment_tag: str
+
+
 @lru_cache
-def _get_clock(logger: LoggerDependency) -> Clock:
-    return Clock(logger)
+def _get_experiment(logger: LoggerDependency) -> Experiment:
+    clock = Clock(logger)
+    return Experiment(clock=clock, experiment_tag="")
 
 
-ClockDependency = Annotated[Clock, Depends(_get_clock)]
+ExperimentDependency = Annotated[Experiment, Depends(_get_experiment)]
