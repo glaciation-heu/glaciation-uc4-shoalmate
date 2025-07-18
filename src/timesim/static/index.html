@@ -88,9 +88,6 @@
             }
         }
 
-        updateRows()
-        setInterval(updateRows, 900);
-
         async function startExperiment() {
             await fetch('/api/timesim/experiment', {
                 method: 'POST',
@@ -126,6 +123,13 @@
             startButton.setAttribute('onclick', 'disableButton()');
             await stopExperiment();
         }
+
+        async function main() {
+            await updateRows();
+            setInterval(updateRows, 900);
+        }
+
+        main();
     </script>
 </head>
 <body>
