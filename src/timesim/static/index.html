@@ -80,6 +80,12 @@
             document.getElementById('virtual-time').textContent = data.virtual_time_sec;
             document.getElementById('virtual-time').textContent = formatDuration(data.virtual_time_sec);
             document.getElementById('experiment-duration').textContent = formatDuration(data.experiment_duration_sec);
+
+            if (data.is_active) {
+                await disableButton();
+            } else {
+                await enableButton();
+            }
         }
 
         updateRows()
@@ -96,6 +102,29 @@
                     experiment_tag: document.getElementById('experiment-tag').value
                 })
             });
+        }
+
+        async function stopExperiment() {
+            await fetch('/api/timesim/experiment', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        }
+
+        async function disableButton() {
+            const startButton = document.querySelector('button');
+            startButton.textContent = 'Stop';
+            startButton.setAttribute('onclick', 'enableButton()');
+            await startExperiment();
+        }
+
+        async function enableButton() {
+            const startButton = document.querySelector('button');
+            startButton.textContent = 'Start';
+            startButton.setAttribute('onclick', 'disableButton()');
+            await stopExperiment();
         }
     </script>
 </head>
@@ -129,7 +158,7 @@
                 <input id="experiment-tag" value="experiment-1"/>
             </span>
         </label>
-        <button onclick="startExperiment()">Start</button>
+        <button>...</button>
     </div>
 </body>
 </html>
