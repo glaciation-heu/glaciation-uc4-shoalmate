@@ -15,7 +15,12 @@ async function update() {
 
 async function fetchState(){
     const response = await fetch('/api/timesim');
-    state = await response.json();
+    const data = await response.json();
+    const old_inputs = [state.minutes_per_hour, state.experiment_tag];
+    state = data;
+    if (!state.is_active) {  // Use remote value if experiment started
+        [state.minutes_per_hour, state.experiment_tag] = old_inputs;
+    }
 }
 
 function render() {
@@ -28,6 +33,8 @@ function render() {
         button.textContent = 'Stop';
         button.setAttribute('onclick', 'onclickButtonStop()');
         inputs.forEach(input => input.disabled = true);
+        document.getElementById("minuts-per-hour").value = state.minutes_per_hour;
+        document.getElementById("experiment-tag").value = state.experiment_tag;
         button.classList.add('danger');
     } else {
         button.textContent = 'Start';
@@ -49,7 +56,11 @@ async function onclickButtonStop() {
 }
 
 async function onclickButtonStart() {
+    const minutes_per_hour = document.getElementById("minuts-per-hour").value;
+    const experiment_tag = document.getElementById("experiment-tag").value;
     state.is_active = true;
+    state.minutes_per_hour = minutes_per_hour;
+    state.experiment_tag = experiment_tag;
     render();
     await fetch('/api/timesim/experiment', {
         method: 'POST',
@@ -57,8 +68,8 @@ async function onclickButtonStart() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            minutes_per_hour: document.getElementById('minuts-per-hour').value,
-            experiment_tag: document.getElementById('experiment-tag').value
+            minutes_per_hour: minutes_per_hour,
+            experiment_tag: experiment_tag,
         })
     });
 }
