@@ -11,4 +11,5 @@ FROM python:3.13-alpine
 COPY --from=builder --chown=app:app /app /app
 ENV PATH="/app/.venv/bin:$PATH" \
     PYTHONPATH="/app/src"
+WORKDIR /app
 CMD ["python"]
