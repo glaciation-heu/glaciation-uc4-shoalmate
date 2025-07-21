@@ -8,7 +8,7 @@ class Timesim(BaseModel):
     experiment_duration_sec: float | None
     experiment_tag: str
     is_active: bool
-    minutes_per_hour: int
+    minutes_per_hour: float
     virtual_time_sec: float | None
 
 
