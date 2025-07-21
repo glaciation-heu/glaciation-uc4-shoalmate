@@ -1,7 +1,7 @@
 from enum import StrEnum
 from functools import lru_cache
 
-from pydantic import BaseModel
+from pydantic import BaseModel, HttpUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -36,6 +36,9 @@ class Settings(BaseSettings):
 
     # Threshold for considering ranks similar enough to prefer the current cluster
     rank_similarity_threshold: float = 0.001
+
+    # Base URL for Time Simulator server
+    timesim_url: HttpUrl = HttpUrl("http://timesim")
 
     # Green Energy Index dataset name prefix.
     # Use a full object name to limit loading to a single file.

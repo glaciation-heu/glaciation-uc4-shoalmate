@@ -1,5 +1,4 @@
 import logging
-import re
 from datetime import timedelta
 from io import BytesIO
 from time import sleep
@@ -8,12 +7,13 @@ from minio.datatypes import Object
 from shoalmate.allocator import Allocator
 from shoalmate.clients.minio import get_client
 from shoalmate.settings import get_settings, ClusterIDEnum
+from timesim.schemas import Timesim
+from timesim.timesim import get_timesim_state
 
 
 class Orchestrator:
     """Orchestrates the movement of objects between MinIO buckets across clusters."""
 
-    _object_name_regexp = re.compile(r".*_year(\d+)_(\d+)\.parquet")
     _sleep_time = 10
 
     def __init__(self) -> None:
@@ -36,7 +36,8 @@ class Orchestrator:
         return objects
 
     def _move(self, obj: Object) -> None:
-        time_offset = self._get_time_offset_from_name(obj.object_name)  # type: ignore[arg-type]
+        timesim = self._get_active_timesim_state()
+        time_offset = timedelta(seconds=timesim.virtual_time_sec)  # type: ignore[arg-type]
         target_cluster_id = self._allocator.get_target_cluster(time_offset)
         logging.info(f"Moving {obj.object_name} to cluster {target_cluster_id}")
         self._wait_if_busy(target_cluster_id)
@@ -69,14 +70,19 @@ class Orchestrator:
             else:
                 break
 
+    def _get_active_timesim_state(self) -> Timesim:
+        """Wait until Timesim is active and return its state."""
+        while True:
+            state = get_timesim_state(self._settings.timesim_url)
+            if state.is_active:
+                break
+            else:
+                logging.info(
+                    "Wait %s seconds because timesim is not active." % self._sleep_time
+                )
+                sleep(self._sleep_time)
+        return state
+
     def _get_output_count(self, target_cluster_id: ClusterIDEnum) -> int:
         client = get_client(target_cluster_id)
         return len(list(client.list_objects(self._settings.output_bucket)))
-
-    @classmethod
-    def _get_time_offset_from_name(cls, object_name: str) -> timedelta:
-        match = cls._object_name_regexp.fullmatch(object_name)
-        _year, minutes = match.groups()  # type: ignore[union-attr]
-        total_minutes = int(minutes)
-        time_offset = timedelta(minutes=total_minutes)
-        return time_offset

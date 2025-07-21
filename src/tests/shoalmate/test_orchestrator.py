@@ -5,6 +5,7 @@ import pytest
 from shoalmate.clients.minio import get_client
 from shoalmate.orchestrator import Orchestrator
 from shoalmate.settings import ClusterIDEnum, get_settings
+from timesim.schemas import Timesim
 
 
 class ObjectsCount(NamedTuple):
@@ -50,7 +51,18 @@ def allocator_mock(mocker):
 
 
 @pytest.fixture
-def orchestrator_mock(minio_clusters_mock, allocator_mock):
+def orchestrator_mock(mocker, minio_clusters_mock, allocator_mock):
+    mocker.patch(
+        "shoalmate.orchestrator.get_timesim_state",
+        return_value=Timesim(
+            cluster_id="A",
+            experiment_duration_sec=1,
+            experiment_tag="tag1",
+            is_active=True,
+            minutes_per_hour=60,
+            virtual_time_sec=1,
+        ),
+    )
     orchestrator = Orchestrator()
     orchestrator._sleep_time = 0
     return orchestrator
@@ -139,3 +151,37 @@ def test__call_get_output_count__return_count(orchestrator_mock):
 
     # Assert
     assert result == 1
+
+
+def test__call_get_active_timesim_state_when_not_active__wait(
+    mocker, settings_mock, orchestrator_mock
+):
+    # Arrange
+    state_1 = Timesim(
+        cluster_id="A",
+        experiment_duration_sec=None,
+        experiment_tag="tag1",
+        is_active=False,
+        minutes_per_hour=60,
+        virtual_time_sec=None,
+    )
+    state_2 = Timesim(
+        cluster_id="A",
+        experiment_duration_sec=1,
+        experiment_tag="tag1",
+        is_active=True,
+        minutes_per_hour=60,
+        virtual_time_sec=1,
+    )
+    mocker.patch(
+        "shoalmate.orchestrator.get_timesim_state",
+        side_effect=[state_1, state_2],
+    )
+    sleep_mock = mocker.patch("shoalmate.orchestrator.sleep")
+
+    # Act
+    result = orchestrator_mock._get_active_timesim_state()
+
+    # Assert
+    sleep_mock.assert_called_once_with(orchestrator_mock._sleep_time)
+    assert result == state_2
