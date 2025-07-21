@@ -1,26 +1,10 @@
-from typing import Annotated
-
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import RedirectResponse
-from pydantic import BaseModel, Field
 
 from timesim.domain import ExperimentDependency
+from timesim.schemas import Timesim, ExperimentCreate
 
 router = APIRouter()
-
-
-class Timesim(BaseModel):
-    cluster_id: str
-    experiment_duration_sec: float | None
-    experiment_tag: str
-    is_active: bool
-    minutes_per_hour: int
-    virtual_time_sec: float | None
-
-
-class ExperimentCreate(BaseModel):
-    minutes_per_hour: Annotated[int, Field(gt=0, lt=61)]
-    experiment_tag: Annotated[str, Field(min_length=5, max_length=32)]
 
 
 @router.get("/", include_in_schema=False)

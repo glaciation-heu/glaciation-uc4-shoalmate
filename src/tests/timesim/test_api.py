@@ -1,7 +1,7 @@
 import pytest
 from httpx import Response
 
-from timesim.api import Timesim
+from timesim.schemas import Timesim
 
 DEFAULT_CREATE_ARGS = {
     "experiment_tag": "experiment-1",
