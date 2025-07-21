@@ -6,7 +6,7 @@ from typing import Iterator
 
 from minio.datatypes import Object
 
-from shoalmate.client import get_client
+from shoalmate.clients.minio import get_client
 from shoalmate.settings import get_settings, ClusterIDEnum
 
 

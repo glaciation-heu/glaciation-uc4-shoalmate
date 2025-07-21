@@ -2,7 +2,7 @@ from typing import NamedTuple
 
 import pytest
 
-from shoalmate.client import get_client
+from shoalmate.clients.minio import get_client
 from shoalmate.orchestrator import Orchestrator
 from shoalmate.settings import ClusterIDEnum, get_settings
 

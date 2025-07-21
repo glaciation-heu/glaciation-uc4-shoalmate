@@ -6,7 +6,7 @@ from time import sleep
 from minio.datatypes import Object
 
 from shoalmate.allocator import Allocator
-from shoalmate.client import get_client
+from shoalmate.clients.minio import get_client
 from shoalmate.settings import get_settings, ClusterIDEnum
 
 
