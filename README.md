@@ -36,19 +36,16 @@ pytest -m "e2e"
 
 ## Changelog
 
-### [v0.3.0] - Planned on 2025-07-11
+### [v0.3.0] - 2025-07-21
 #### Added
-- New virtual clock feature to select Green Energy Index values. before this update chucnk filename is used instead.
-- Web UI to control the virtual clock state:
+- New virtual clock feature to select Green Energy Index values. Before this update chucnk filename was used instead.
+- Web UI to control the virtual clock state.
 
 #### Virtual Clock requirements
 - Control plane
   - Simulated time
     - Value
     - Start, stop, and reset buttons
-  - Green Index for all custers
-  - How many files in `proc/` of each cluster now
-  - Tune proc/ capacity
 - No need to sync cluster times
 - Every time tick should produce a log record
   - Real time and simulated time
