@@ -86,7 +86,7 @@ function formatDuration(seconds_total) {
         const hours = Math.floor(seconds_total / 3600) % 24;
         const days = Math.floor(seconds_total / 86400);
         formatted = `${seconds}s`;
-        if (minutes > 0) formatted = `${minutes}h ` + formatted;
+        if (minutes > 0) formatted = `${minutes}m ` + formatted;
         if (hours > 0) formatted = `${hours}h ` + formatted;
         if (days > 0) formatted = `${days}d ` + formatted;
     }
