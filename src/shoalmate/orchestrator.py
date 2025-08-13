@@ -38,8 +38,12 @@ class Orchestrator:
     def _move(self, obj: Object) -> None:
         timesim = self._get_active_timesim_state()
         time_offset = timedelta(seconds=timesim.virtual_time_sec)  # type: ignore[arg-type]
-        target_cluster_id = self._allocator.get_target_cluster(time_offset)
-        logging.info(f"Moving {obj.object_name} to cluster {target_cluster_id}")
+        target_cluster_id, debug_info = self._allocator.get_target_cluster(time_offset)
+        logging.info(
+            f"Experiment {timesim.experiment_tag}. "
+            f"Moving {obj.object_name} to cluster {target_cluster_id} "
+            f"by Green Index line {debug_info.green_index_line_number}."
+        )
         self._wait_if_busy(target_cluster_id)
         target_client = get_client(target_cluster_id)
         response = self._source_client.get_object(

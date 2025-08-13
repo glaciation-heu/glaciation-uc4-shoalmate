@@ -14,17 +14,26 @@ Ranks = dict[ClusterIDEnum, float]
 _Timeline = tuple[Ranks, ...]
 
 
+class RankerDebugInfo:
+    green_index_line_number: int
+
+    def __init__(self, value: int) -> None:
+        self.green_index_line_number = value
+
+
 class Ranker:
     """Provide Green Energy Index values for all clusters at some moment."""
 
     def __init__(self) -> None:
         self._timeline = _Loader().load()
 
-    def get(self, time_offset: timedelta) -> Ranks:
+    def get(self, time_offset: timedelta) -> tuple[Ranks, RankerDebugInfo]:
         """Get the Green Energy Index for all clusters at the given time offset."""
         self._validate(time_offset)
         hours = int(time_offset.total_seconds() // 3600)
-        return self._timeline[hours % len(self._timeline)]
+        line_number = hours % len(self._timeline)
+        ranks = self._timeline[line_number]
+        return ranks, RankerDebugInfo(line_number)
 
     def _validate(self, time_offset: timedelta) -> None:
         if time_offset.total_seconds() < 0:
