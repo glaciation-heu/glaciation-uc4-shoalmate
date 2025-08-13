@@ -56,13 +56,15 @@ def test__call__valid_response(
     expected_result,
 ):
     # Arrange
-    ranker_mock.get.return_value = ranks
+    debug_info_mock = mocker.Mock()
+    ranker_mock.get.return_value = ranks, debug_info_mock
     settings_mock.cluster_id = current_cluster_id
     time_offset = timedelta(hours=1)
 
     # Act
     allocator = Allocator()
-    actual_result = allocator.get_target_cluster(time_offset)
+    actual_cluster, debug_info = allocator.get_target_cluster(time_offset)
 
     # Assert
-    assert actual_result == expected_result
+    assert actual_cluster == expected_result
+    assert debug_info is debug_info_mock

@@ -4,6 +4,7 @@ import pytest
 
 from shoalmate.clients.minio import get_client
 from shoalmate.orchestrator import Orchestrator
+from shoalmate.ranker import RankerDebugInfo
 from shoalmate.settings import ClusterIDEnum, get_settings
 from timesim.schemas import Timesim
 
@@ -45,7 +46,8 @@ def minio_clusters_mock(minio_mock, settings_mock):
 def allocator_mock(mocker):
     allocator_mock = mocker.patch("shoalmate.orchestrator.Allocator")
     allocator_mock.return_value.get_target_cluster.return_value = (
-        ClusterIDEnum.CLUSTER_A
+        ClusterIDEnum.CLUSTER_A,
+        RankerDebugInfo(0),
     )
     return allocator_mock.return_value
 
@@ -80,7 +82,10 @@ def test__run_with_one_object__moved_to_the_right_cluster(
         data=bytes(),
         length=0,
     )
-    allocator_mock.get_target_cluster.return_value = allocated_cluster
+    allocator_mock.get_target_cluster.return_value = (
+        allocated_cluster,
+        RankerDebugInfo(0),
+    )
 
     # Act
     orchestrator_mock.run_once()

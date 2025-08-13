@@ -15,9 +15,11 @@ def test__init_from_remote__data_loaded():
     Requires settings.env to be loaded and a connection to MinIO.
     """
     ranker = Ranker()
-    result = ranker.get(timedelta(hours=365 * 24 - 1))
-    assert result == {
+    hours = 365 * 24 - 1
+    ranks, debug_info = ranker.get(timedelta(hours=hours))
+    assert ranks == {
         ClusterIDEnum.CLUSTER_A: 0.75,
         ClusterIDEnum.CLUSTER_B: 0.4732143,
         ClusterIDEnum.CLUSTER_C: 0.42559522,
     }
+    assert debug_info.green_index_line_number == hours

@@ -36,14 +36,16 @@ def loader_mock():
 @pytest.mark.parametrize("hours_offset", [0, 1, 2])
 def test__call_get_with_valid_hour_offset__valid_response(hours_offset):
     ranker = Ranker()
-    result = ranker.get(timedelta(hours=hours_offset))
-    assert result == TEST_TIMELINE[hours_offset]
+    ranks, debug_info = ranker.get(timedelta(hours=hours_offset))
+    assert ranks == TEST_TIMELINE[hours_offset]
+    assert debug_info.green_index_line_number == hours_offset
 
 
 def test__call_get_with_valid_fractional_offset__valid_response():
     ranker = Ranker()
-    result = ranker.get(timedelta(seconds=1))
-    assert result == TEST_TIMELINE[0]
+    ranks, debug_info = ranker.get(timedelta(seconds=1))
+    assert ranks == TEST_TIMELINE[0]
+    assert debug_info.green_index_line_number == 0
 
 
 @pytest.mark.parametrize(
