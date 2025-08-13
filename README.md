@@ -36,6 +36,13 @@ pytest -m "e2e"
 
 ## Changelog
 
+### [v0.3.1] - 2025-08-13
+#### Added
+- Now log records about file movement have additional debugging information.
+
+#### Fixed
+- Minute formatting in Time Simulator UI.
+
 ### [v0.3.0] - 2025-07-21
 #### Added
 - New virtual clock feature to select Green Energy Index values. Before this update chucnk filename was used instead.
