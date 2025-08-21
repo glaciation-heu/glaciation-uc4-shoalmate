@@ -50,6 +50,7 @@ class Settings(BaseSettings):
         env_nested_delimiter="__",
     )
 
+
 @lru_cache
 def get_settings() -> Settings:
     # noinspection PyArgumentList

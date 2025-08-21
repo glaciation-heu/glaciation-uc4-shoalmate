@@ -89,4 +89,10 @@ class Orchestrator:
 
     def _get_output_count(self, target_cluster_id: ClusterIDEnum) -> int:
         client = get_client(target_cluster_id)
-        return len(list(client.list_objects(get_cluster_settings(target_cluster_id).output_bucket)))
+        return len(
+            list(
+                client.list_objects(
+                    get_cluster_settings(target_cluster_id).output_bucket
+                )
+            )
+        )
