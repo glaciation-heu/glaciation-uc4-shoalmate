@@ -32,7 +32,7 @@ class Orchestrator:
     def _list(self) -> list[Object]:
         bucket = self._settings.input_bucket_chunks
         objects = list(self._source_client.list_objects(bucket))
-        objects.sort(key=lambda x: x.object_name) # type: ignore[arg-type]
+        objects.sort(key=lambda x: x.object_name)
         return objects
 
     def _move(self, obj: Object) -> None:

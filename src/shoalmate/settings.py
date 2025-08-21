@@ -1,6 +1,5 @@
 from enum import StrEnum
 from functools import lru_cache
-from typing import Any
 
 from pydantic import BaseModel, HttpUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
