@@ -1,5 +1,6 @@
 from enum import StrEnum
 from functools import lru_cache
+from typing import Any
 
 from pydantic import BaseModel, HttpUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -12,11 +13,14 @@ class ClusterIDEnum(StrEnum):
 
 
 class MinioSettings(BaseModel):
+    cluster: ClusterIDEnum
     access_key: str
     host: str = "minio.uc4-minio.svc.cluster.local"
     port: int = 80
     secret_key: str
     secure: bool = False
+    output_bucket: str = "proc"
+    output_bucket_capacity: int = 10
 
 
 class Settings(BaseSettings):
@@ -31,8 +35,6 @@ class Settings(BaseSettings):
     # MinIO buckets
     input_bucket_chunks: str = "chunks"
     input_bucket_index: str = "green-index"
-    output_bucket: str = "proc"
-    output_bucket_capacity: int = 10
 
     # Threshold for considering ranks similar enough to prefer the current cluster
     rank_similarity_threshold: float = 0.001
@@ -48,7 +50,6 @@ class Settings(BaseSettings):
         env_prefix="shoalmate__",
         env_nested_delimiter="__",
     )
-
 
 @lru_cache
 def get_settings() -> Settings:

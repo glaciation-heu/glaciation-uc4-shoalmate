@@ -5,7 +5,7 @@ from time import sleep
 from minio.datatypes import Object
 
 from shoalmate.allocator import Allocator
-from shoalmate.clients.minio import get_client
+from shoalmate.clients.minio import get_client, get_cluster_settings
 from shoalmate.settings import get_settings, ClusterIDEnum
 from timesim.schemas import Timesim
 from timesim.timesim import get_timesim_state
@@ -51,7 +51,7 @@ class Orchestrator:
             obj.object_name,  # type: ignore[arg-type]
         )
         target_client.put_object(
-            self._settings.output_bucket,
+            get_cluster_settings(target_cluster_id).output_bucket,
             obj.object_name,  # type: ignore[arg-type]
             BytesIO(response.data),
             obj.size,  # type: ignore[arg-type]
@@ -64,7 +64,7 @@ class Orchestrator:
     def _wait_if_busy(self, target_cluster_id: ClusterIDEnum) -> None:
         while True:
             count = self._get_output_count(target_cluster_id)
-            if count > self._settings.output_bucket_capacity:
+            if count > get_cluster_settings(target_cluster_id).output_bucket_capacity:
                 logging.info(
                     "Wait cluster %s because it has %d unprocessed objects ",
                     target_cluster_id.value,
@@ -89,4 +89,4 @@ class Orchestrator:
 
     def _get_output_count(self, target_cluster_id: ClusterIDEnum) -> int:
         client = get_client(target_cluster_id)
-        return len(list(client.list_objects(self._settings.output_bucket)))
+        return len(list(client.list_objects(get_cluster_settings(target_cluster_id).output_bucket)))
