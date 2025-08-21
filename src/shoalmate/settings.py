@@ -12,7 +12,6 @@ class ClusterIDEnum(StrEnum):
 
 
 class MinioSettings(BaseModel):
-    cluster: ClusterIDEnum
     access_key: str
     host: str = "minio.uc4-minio.svc.cluster.local"
     port: int = 80
