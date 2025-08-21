@@ -2,7 +2,7 @@ from typing import NamedTuple
 
 import pytest
 
-from shoalmate.clients.minio import get_client
+from shoalmate.clients.minio import get_client, get_cluster_settings
 from shoalmate.orchestrator import Orchestrator
 from shoalmate.ranker import RankerDebugInfo
 from shoalmate.settings import ClusterIDEnum, get_settings
@@ -27,7 +27,11 @@ def get_bucket_counts() -> ClusterCounts:
         client = get_client(cluster_id)
         object_counts = ObjectsCount(
             len(list(client.list_objects(settings.input_bucket_chunks))),
-            len(list(client.list_objects(settings.output_bucket))),
+            len(
+                list(
+                    client.list_objects(get_cluster_settings(cluster_id).output_bucket)
+                )
+            ),
         )
         result.append(object_counts)
     return ClusterCounts(*result)
@@ -39,7 +43,7 @@ def minio_clusters_mock(minio_mock, settings_mock):
     for cluster_id in ClusterIDEnum:
         client = get_client(cluster_id)
         client.make_bucket(settings_mock.input_bucket_chunks)
-        client.make_bucket(settings_mock.output_bucket)
+        client.make_bucket(get_cluster_settings(cluster_id).output_bucket)
 
 
 @pytest.fixture
@@ -143,9 +147,10 @@ def test__run_when_target_is_busy__wait_while_busy(mocker, orchestrator_mock):
 
 def test__call_get_output_count__return_count(orchestrator_mock):
     # Arrange
-    client = get_client(ClusterIDEnum.CLUSTER_A)
+    cluster_id = ClusterIDEnum.CLUSTER_A
+    client = get_client(cluster_id)
     client.put_object(
-        bucket_name=get_settings().output_bucket,
+        bucket_name=get_cluster_settings(cluster_id).output_bucket,
         object_name="test_object.parquet",
         data=bytes(),
         length=0,
