@@ -66,7 +66,7 @@ class _Loader:
         objects = tuple(
             sorted(
                 self._client.list_objects(bucket, prefix=prefix),
-                key=lambda obj: obj.object_name,
+                key=lambda obj: obj.object_name, # type: ignore[arg-type]
             )
         )
         logging.info("Found %d objects in bucket %s", len(objects), bucket)
