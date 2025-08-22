@@ -60,20 +60,20 @@ class _Loader:
         )
         return index
 
-    def _load_list(self) -> tuple[Object]:
+    def _load_list(self) -> list[Object]:
         bucket = self._settings.input_bucket_index
         prefix = self._settings.green_index_object_name_prefix
-        objects = tuple(
+        objects = list(
             sorted(
                 self._client.list_objects(bucket, prefix=prefix),
-                key=lambda obj: obj.object_name,
+                key=lambda obj: obj.object_name if obj.object_name else "",
             )
         )
         logging.info("Found %d objects in bucket %s", len(objects), bucket)
         # noinspection PyTypeChecker
         return objects
 
-    def _load_items(self, objects: tuple[Object]) -> Iterator[Ranks]:
+    def _load_items(self, objects: list[Object]) -> Iterator[Ranks]:
         for object_ in objects:
             data = self._load_data(object_)
             for ranks in self._parse_data(data):
