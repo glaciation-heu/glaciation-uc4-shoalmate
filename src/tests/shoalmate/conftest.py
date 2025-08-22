@@ -2,11 +2,13 @@ import os
 
 import pytest
 
+from unittest.mock import Mock
+
 from shoalmate.settings import Settings, get_settings
 
 
 @pytest.fixture
-def settings_mock(mocker) -> Settings:
+def settings_mock(mocker: Mock) -> Settings:
     env_vars = {
         "SHOALMATE__CLUSTER_ID": "A",
         "SHOALMATE__CLUSTER_A__HOST": "a.example.com",

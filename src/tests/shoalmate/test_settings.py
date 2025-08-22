@@ -1,7 +1,7 @@
-from shoalmate.settings import ClusterIDEnum
+from shoalmate.settings import ClusterIDEnum, Settings
 
 
-def test__init_from_env__initialized(settings_mock):
+def test__init_from_env__initialized(settings_mock: Settings) -> None:
     assert settings_mock.cluster_id == ClusterIDEnum.CLUSTER_A
     assert settings_mock.cluster_a.access_key == "test_access_key_a"
     assert settings_mock.cluster_a.secret_key == "test_secret_key_a"

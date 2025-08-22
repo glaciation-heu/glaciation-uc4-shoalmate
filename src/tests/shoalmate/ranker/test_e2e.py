@@ -7,7 +7,7 @@ from shoalmate.settings import ClusterIDEnum
 
 
 @pytest.mark.e2e
-def test__init_from_remote__data_loaded():
+def test__init_from_remote__data_loaded() -> None:
     """
     End-to-end test.
 
