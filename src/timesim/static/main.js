@@ -5,6 +5,7 @@ let state = {
     is_active: undefined,
     minutes_per_hour: undefined,
     virtual_time_sec: undefined,
+    multicluster: undefined,
 };
 
 
@@ -16,10 +17,10 @@ async function update() {
 async function fetchState(){
     const response = await fetch('/api/timesim');
     const data = await response.json();
-    const old_inputs = [state.minutes_per_hour, state.experiment_tag];
+    const old_inputs = [state.minutes_per_hour, state.experiment_tag, state.multicluster];
     state = data;
     if (!state.is_active) {  // Use remote value if experiment started
-        [state.minutes_per_hour, state.experiment_tag] = old_inputs;
+        [state.minutes_per_hour, state.experiment_tag, state.multicluster] = old_inputs;
     }
 }
 
@@ -67,6 +68,7 @@ async function onclickButtonStart() {
     state.experiment_duration_sec = 0;
     state.minutes_per_hour = minutes_per_hour;
     state.experiment_tag = experiment_tag;
+    state.multicluster = multicluster;
     render();
     await fetch('/api/timesim/experiment', {
         method: 'POST',

@@ -67,6 +67,7 @@ def orchestrator_mock(mocker, minio_clusters_mock, allocator_mock):
             is_active=True,
             minutes_per_hour=60,
             virtual_time_sec=1,
+            multicluster=0,
         ),
     )
     orchestrator = Orchestrator()
@@ -174,6 +175,7 @@ def test__call_get_active_timesim_state_when_not_active__wait(
         is_active=False,
         minutes_per_hour=60,
         virtual_time_sec=None,
+        multicluster=0,
     )
     state_2 = Timesim(
         cluster_id="A",
@@ -182,6 +184,7 @@ def test__call_get_active_timesim_state_when_not_active__wait(
         is_active=True,
         minutes_per_hour=60,
         virtual_time_sec=1,
+        multicluster=0,
     )
     mocker.patch(
         "shoalmate.orchestrator.get_timesim_state",
