@@ -35,6 +35,7 @@ function render() {
         inputs.forEach(input => input.disabled = true);
         document.getElementById("minuts-per-hour").value = state.minutes_per_hour;
         document.getElementById("experiment-tag").value = state.experiment_tag;
+        document.getElementById("multicluster").value = state.multicluster;
         button.classList.add('danger');
     } else {
         button.textContent = 'Start';
@@ -60,6 +61,7 @@ async function onclickButtonStop() {
 async function onclickButtonStart() {
     const minutes_per_hour = document.getElementById("minuts-per-hour").value;
     const experiment_tag = document.getElementById("experiment-tag").value;
+    const multicluster = document.getElementById("multicluster").value;
     state.is_active = true;
     state.virtual_time_sec = 0;
     state.experiment_duration_sec = 0;
@@ -74,6 +76,7 @@ async function onclickButtonStart() {
         body: JSON.stringify({
             minutes_per_hour: minutes_per_hour,
             experiment_tag: experiment_tag,
+            multicluster: multicluster,
         })
     });
 }

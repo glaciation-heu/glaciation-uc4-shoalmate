@@ -62,12 +62,13 @@ class Clock:
 class Experiment:
     clock: Clock
     experiment_tag: str
+    multicluster: int
 
 
 @lru_cache
 def _get_experiment(logger: LoggerDependency) -> Experiment:
     clock = Clock(logger)
-    return Experiment(clock=clock, experiment_tag="")
+    return Experiment(clock=clock, experiment_tag="", multicluster=0)
 
 
 ExperimentDependency = Annotated[Experiment, Depends(_get_experiment)]
