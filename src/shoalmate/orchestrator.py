@@ -35,10 +35,18 @@ class Orchestrator:
         objects.sort(key=lambda x: x.object_name)
         return objects
 
+    def _get_target_bucket(self, cluster_id: ClusterIDEnum) -> str:
+        timesim = self._get_active_timesim_state()
+        out_bucket = get_cluster_settings(cluster_id).output_bucket
+        if timesim.multicluster != 0:
+            out_bucket += f"-{cluster_id.lower()}"
+        return out_bucket
+
     def _move(self, obj: Object) -> None:
         timesim = self._get_active_timesim_state()
         time_offset = timedelta(seconds=timesim.virtual_time_sec)  # type: ignore[arg-type]
         target_cluster_id, debug_info = self._allocator.get_target_cluster(time_offset)
+        target_bucket = self._get_target_bucket(target_cluster_id)
         logging.info(
             f"Experiment {timesim.experiment_tag}. "
             f"Moving {obj.object_name} to cluster {target_cluster_id} "
@@ -51,7 +59,7 @@ class Orchestrator:
             obj.object_name,  # type: ignore[arg-type]
         )
         target_client.put_object(
-            get_cluster_settings(target_cluster_id).output_bucket,
+            target_bucket,
             obj.object_name,  # type: ignore[arg-type]
             BytesIO(response.data),
             obj.size,  # type: ignore[arg-type]
@@ -89,10 +97,5 @@ class Orchestrator:
 
     def _get_output_count(self, target_cluster_id: ClusterIDEnum) -> int:
         client = get_client(target_cluster_id)
-        return len(
-            list(
-                client.list_objects(
-                    get_cluster_settings(target_cluster_id).output_bucket
-                )
-            )
-        )
+        bucket = self._get_target_bucket(target_cluster_id)
+        return len(list(client.list_objects(bucket)))
