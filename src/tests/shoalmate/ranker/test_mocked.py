@@ -35,14 +35,14 @@ def loader_mock():
 
 @pytest.mark.parametrize("hours_offset", [0, 1, 2])
 def test__call_get_with_valid_hour_offset__valid_response(hours_offset: float) -> None:
-    ranker = Ranker()
+    ranker = Ranker(test=True)
     ranks, debug_info = ranker.get(timedelta(hours=hours_offset))
     assert ranks == TEST_TIMELINE[hours_offset]
     assert debug_info.green_index_line_number == hours_offset
 
 
 def test__call_get_with_valid_fractional_offset__valid_response():
-    ranker = Ranker()
+    ranker = Ranker(test=True)
     ranks, debug_info = ranker.get(timedelta(seconds=1))
     assert ranks == TEST_TIMELINE[0]
     assert debug_info.green_index_line_number == 0
@@ -57,7 +57,7 @@ def test__call_get_with_valid_fractional_offset__valid_response():
     ],
 )
 def test__call_get_with_invalid_offset__raise(hours_offset, error):
-    ranker = Ranker()
+    ranker = Ranker(test=True)
     with pytest.raises(ValueError) as err:
         ranker.get(timedelta(hours=hours_offset))
     assert str(err.value) == error

@@ -70,6 +70,7 @@
 #             minutes_per_hour=60,
 #             virtual_time_sec=1,
 #             multicluster=0,
+#             scores=0,
 #         ),
 #     )
 #     orchestrator = Orchestrator()
@@ -174,6 +175,7 @@
 #         minutes_per_hour=60,
 #         virtual_time_sec=None,
 #         multicluster=0,
+#         scores=0,
 #     )
 #     state_2 = Timesim(
 #         cluster_id="A",
@@ -183,6 +185,7 @@
 #         minutes_per_hour=60,
 #         virtual_time_sec=1,
 #         multicluster=0,
+#         scores=0,
 #     )
 #     mocker.patch(
 #         "shoalmate.orchestrator.get_timesim_state",

@@ -7,6 +7,7 @@ DEFAULT_CREATE_ARGS = {
     "experiment_tag": "experiment-1",
     "minutes_per_hour": 5,
     "multicluster": 0,
+    "scores": 0,
 }
 
 
@@ -33,7 +34,8 @@ def test__get_timesim_when_created__valid_response(create_experiment, client):
 
     assert response.status_code == 200
     actual = response.json()
-    assert len(actual) == 7
+    print(f"ACTUAL: {actual}")
+    assert len(actual) == 8
     assert actual["cluster_id"] == "A"
     assert 0 < actual["experiment_duration_sec"] < 0.1
     assert actual["experiment_tag"] == "experiment-1"
@@ -41,6 +43,7 @@ def test__get_timesim_when_created__valid_response(create_experiment, client):
     assert actual["minutes_per_hour"] == 5
     assert 0 < actual["virtual_time_sec"] < 0.1
     assert actual["multicluster"] == 0
+    assert actual["scores"] == 0
 
 
 def test__get_timesim_when_not_created__valid_response(client):
@@ -56,6 +59,7 @@ def test__get_timesim_when_not_created__valid_response(client):
         minutes_per_hour=60,
         virtual_time_sec=None,
         multicluster=0,
+        scores=0,
     )
     assert actual == expected
 
