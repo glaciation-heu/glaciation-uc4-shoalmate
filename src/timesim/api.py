@@ -24,6 +24,7 @@ async def get_timesim(experiment: ExperimentDependency) -> Timesim:
         minutes_per_hour=experiment.clock.virtual_sec_per_real_minute,
         virtual_time_sec=experiment.clock.virtual_sec,
         multicluster=experiment.multicluster,
+        scores=experiment.scores,
     )
     return result
 
@@ -38,6 +39,7 @@ async def create_experiment(
     """Start a new time simulation experiment."""
     experiment.experiment_tag = params.experiment_tag
     experiment.multicluster = params.multicluster
+    experiment.scores = params.scores
     clock = experiment.clock
     if clock.is_active:
         raise HTTPException(status_code=409, detail="Time simulation is already active")

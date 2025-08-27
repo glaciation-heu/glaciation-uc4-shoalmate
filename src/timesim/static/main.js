@@ -6,6 +6,7 @@ let state = {
     minutes_per_hour: undefined,
     virtual_time_sec: undefined,
     multicluster: undefined,
+    scores: undefined,
 };
 
 
@@ -17,10 +18,10 @@ async function update() {
 async function fetchState(){
     const response = await fetch('/api/timesim');
     const data = await response.json();
-    const old_inputs = [state.minutes_per_hour, state.experiment_tag, state.multicluster];
+    const old_inputs = [state.minutes_per_hour, state.experiment_tag, state.multicluster, state.scores];
     state = data;
     if (!state.is_active) {  // Use remote value if experiment started
-        [state.minutes_per_hour, state.experiment_tag, state.multicluster] = old_inputs;
+        [state.minutes_per_hour, state.experiment_tag, state.multicluster, state.scores] = old_inputs;
     }
 }
 
@@ -37,6 +38,7 @@ function render() {
         document.getElementById("minuts-per-hour").value = state.minutes_per_hour;
         document.getElementById("experiment-tag").value = state.experiment_tag;
         document.getElementById("multicluster").value = state.multicluster;
+        document.getElementById("scores").value = state.scores;
         button.classList.add('danger');
     } else {
         button.textContent = 'Start';
@@ -63,12 +65,14 @@ async function onclickButtonStart() {
     const minutes_per_hour = document.getElementById("minuts-per-hour").value;
     const experiment_tag = document.getElementById("experiment-tag").value;
     const multicluster = document.getElementById("multicluster").value;
+    const scores = document.getElementById("scores").value;
     state.is_active = true;
     state.virtual_time_sec = 0;
     state.experiment_duration_sec = 0;
     state.minutes_per_hour = minutes_per_hour;
     state.experiment_tag = experiment_tag;
     state.multicluster = multicluster;
+    state.scores = scores
     render();
     await fetch('/api/timesim/experiment', {
         method: 'POST',
@@ -79,6 +83,7 @@ async function onclickButtonStart() {
             minutes_per_hour: minutes_per_hour,
             experiment_tag: experiment_tag,
             multicluster: multicluster,
+            scores: scores,
         })
     });
 }
